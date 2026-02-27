@@ -1,0 +1,17 @@
+{
+  "modules": [
+    {
+      "id": "m1",
+      "title": "Web Fundamentals",
+      "desc": "How the web works",
+      "free": true,
+      "lessons": [
+        {
+          "title": "Intro to Web",
+          "video": "https://www.youtube.com/embed/z9gz2nJp7x4",
+          "text": "Welcome to the Web."
+        }
+      ]
+    }
+  ]
+}
