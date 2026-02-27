@@ -1,204 +1,258 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-<meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>AscendX Learning Platform</title>
+<title>AscendX</title>
+
 <style>
-  body { font-family: sans-serif; margin: 0; padding: 0; background:#f3f4f6; }
-  header { background:#1e40af; color:white; padding:1rem; text-align:center; font-size:1.5rem; }
-  main { padding:1rem; }
-  .module { background:white; margin:1rem 0; padding:1rem; border-radius:8px; box-shadow:0 2px 5px rgba(0,0,0,0.1);}
-  .lesson { margin:0.5rem 0; padding:0.5rem; background:#e0e7ff; border-radius:4px; cursor:pointer; }
-  .lesson iframe { width:100%; height:200px; margin-top:0.5rem; }
-  .admin-panel { background:#fef3c7; padding:1rem; margin:1rem 0; border-radius:8px; }
-  input, textarea, select, button { margin:0.3rem 0; width:100%; padding:0.5rem; border-radius:4px; border:1px solid #ccc; }
-  #playground { margin-top:1rem; width:100%; min-height:200px; background:white; border:1px solid #ccc; padding:0.5rem; border-radius:8px; }
+body { font-family: Arial; margin:0; background:#f3f4f6; }
+header { background:#1e40af; color:white; padding:15px; text-align:center; }
+main { padding:15px; }
+
+.module {
+  background:white;
+  padding:15px;
+  margin-bottom:15px;
+  border-radius:8px;
+  box-shadow:0 2px 5px rgba(0,0,0,0.1);
+}
+
+.lesson {
+  background:#e0e7ff;
+  padding:10px;
+  margin-top:8px;
+  border-radius:6px;
+}
+
+iframe { width:100%; height:200px; border:none; margin-top:8px; }
+
+textarea, input, select, button {
+  width:100%;
+  padding:8px;
+  margin-top:6px;
+  border-radius:6px;
+  border:1px solid #ccc;
+}
+
+button {
+  background:#1e40af;
+  color:white;
+  border:none;
+  margin-top:10px;
+}
+
+.admin {
+  background:#fff3cd;
+  padding:15px;
+  margin-top:20px;
+  border-radius:8px;
+}
 </style>
 </head>
+
 <body>
 
 <header>AscendX Learning Platform</header>
 
 <main>
-  <div id="modulesContainer"></div>
 
-  <!-- Playground -->
-  <h2>Code Playground</h2>
-  <textarea id="codeInput" placeholder="Write HTML/JS/CSS here..." style="width:100%; height:150px;"></textarea>
-  <button onclick="runPlayground()">Run Code</button>
-  <iframe id="playground" sandbox="allow-scripts allow-same-origin"></iframe>
+<div id="modules"></div>
 
-  <!-- Admin Panel -->
-  <div class="admin-panel">
-    <h2>Admin Panel</h2>
-    <input type="password" id="adminPassword" placeholder="Enter admin password">
-    <button onclick="loginAdmin()">Login as Admin</button>
+<h2>Code Playground</h2>
+<textarea id="codeInput" placeholder="Write HTML/CSS/JS here..."></textarea>
+<button onclick="runCode()">Run Code</button>
+<iframe id="output"></iframe>
 
-    <div id="adminControls" style="display:none;">
-      <h3>GitHub Token</h3>
-      <input type="text" id="githubToken" placeholder="Paste your fine-grained token here">
+<div class="admin">
+<h2>Admin Panel</h2>
 
-      <h3>Add Module</h3>
-      <input type="text" id="moduleTitle" placeholder="Module Title">
-      <textarea id="moduleDesc" placeholder="Module Description"></textarea>
-      <select id="moduleFree">
-        <option value="true">Free</option>
-        <option value="false">Premium</option>
-      </select>
-      <button onclick="addModule()">Add Module</button>
+<input type="password" id="adminPass" placeholder="Enter Admin Password">
+<button onclick="login()">Login</button>
 
-      <h3>Add Lesson (to last module)</h3>
-      <input type="text" id="lessonTitle" placeholder="Lesson Title">
-      <input type="text" id="lessonVideo" placeholder="YouTube embed URL (optional)">
-      <textarea id="lessonText" placeholder="Lesson text"></textarea>
-      <button onclick="addLesson()">Add Lesson</button>
+<div id="adminControls" style="display:none;">
 
-      <button onclick="saveToGitHub()">Save to GitHub</button>
-    </div>
-  </div>
+<input type="text" id="githubToken" placeholder="Paste GitHub Token">
+
+<h3>Add Module</h3>
+<input type="text" id="modTitle" placeholder="Module Title">
+<textarea id="modDesc" placeholder="Module Description"></textarea>
+<select id="modFree">
+<option value="true">Free</option>
+<option value="false">Premium</option>
+</select>
+<button onclick="addModule()">Add Module</button>
+
+<h3>Add Lesson (to last module)</h3>
+<input type="text" id="lessonTitle" placeholder="Lesson Title">
+<input type="text" id="lessonVideo" placeholder="YouTube Embed URL (optional)">
+<textarea id="lessonText" placeholder="Lesson Text"></textarea>
+<button onclick="addLesson()">Add Lesson</button>
+
+<button onclick="saveToGitHub()">Save To GitHub</button>
+
+</div>
+</div>
+
 </main>
 
 <script>
-let coursesData = [];
-let adminLoggedIn = false;
-const ADMIN_PASSWORD = "ascendx123"; // Change this to your secure password
+const ADMIN_PASSWORD = "ascendx123"; 
+let courses = [];
+let loggedIn = false;
 
-// ---------- Admin Login ----------
-function loginAdmin() {
-  const pw = document.getElementById('adminPassword').value;
-  if(pw === ADMIN_PASSWORD) {
-    adminLoggedIn = true;
-    document.getElementById('adminControls').style.display = 'block';
-    alert('Admin logged in!');
+// Load courses.json from GitHub Pages
+fetch("courses.json")
+.then(res => res.json())
+.then(data => {
+  courses = data;
+  render();
+})
+.catch(() => { courses = []; render(); });
+
+// Render modules
+function render(){
+  const container = document.getElementById("modules");
+  container.innerHTML = "";
+
+  courses.forEach((mod, i) => {
+    let div = document.createElement("div");
+    div.className = "module";
+
+    div.innerHTML = `
+      <h3>${mod.title} ${mod.free ? "(Free)" : "(Premium)"}</h3>
+      <p>${mod.desc}</p>
+      <button onclick="toggle(${i})">View Lessons</button>
+      <div id="lessons${i}" style="display:none;"></div>
+    `;
+    container.appendChild(div);
+  });
+}
+
+function toggle(i){
+  const div = document.getElementById("lessons"+i);
+  div.style.display = div.style.display === "none" ? "block" : "none";
+  div.innerHTML = "";
+
+  courses[i].lessons.forEach(lesson => {
+    let l = document.createElement("div");
+    l.className = "lesson";
+    l.innerHTML = `
+      <strong>${lesson.title}</strong>
+      ${lesson.video ? `<iframe src="${lesson.video}"></iframe>` : ""}
+      <p>${lesson.text}</p>
+    `;
+    div.appendChild(l);
+  });
+}
+
+// Playground
+function runCode(){
+  document.getElementById("output").srcdoc =
+    document.getElementById("codeInput").value;
+}
+
+// Admin login
+function login(){
+  if(document.getElementById("adminPass").value === ADMIN_PASSWORD){
+    loggedIn = true;
+    document.getElementById("adminControls").style.display = "block";
+    alert("Admin Logged In");
   } else {
-    alert('Wrong password!');
+    alert("Wrong Password");
   }
 }
 
-// ---------- Render Modules for Students ----------
-function renderModules() {
-  const container = document.getElementById('modulesContainer');
-  container.innerHTML = '';
-  coursesData.forEach((mod, idx) => {
-    const modDiv = document.createElement('div');
-    modDiv.className = 'module';
-    modDiv.innerHTML = `<h3>${mod.title} ${mod.free ? '(Free)' : '(Premium)'}</h3>
-                        <p>${mod.desc}</p>
-                        <button onclick="toggleLessons(${idx})">Start Learning</button>
-                        <div id="lessons${idx}" style="display:none;"></div>`;
-    container.appendChild(modDiv);
+// Add module
+function addModule(){
+  if(!loggedIn) return alert("Login first");
+  let title = document.getElementById("modTitle").value;
+  if(!title) return alert("Module title required");
+
+  courses.push({
+    title: title,
+    desc: document.getElementById("modDesc").value,
+    free: document.getElementById("modFree").value === "true",
+    lessons: []
   });
+
+  render();
+  alert("Module added");
 }
 
-// ---------- Toggle Lessons ----------
-function toggleLessons(index) {
-  const lessonsDiv = document.getElementById('lessons'+index);
-  lessonsDiv.style.display = lessonsDiv.style.display === 'none' ? 'block' : 'none';
-  lessonsDiv.innerHTML = '';
-  coursesData[index].lessons.forEach(lesson => {
-    const lessonDiv = document.createElement('div');
-    lessonDiv.className = 'lesson';
-    lessonDiv.innerHTML = `<strong>${lesson.title}</strong>
-      ${lesson.video ? `<iframe src="${lesson.video}" frameborder="0"></iframe>` : ''}
-      <p>${lesson.text}</p>`;
-    lessonsDiv.appendChild(lessonDiv);
+// Add lesson
+function addLesson(){
+  if(!loggedIn) return alert("Login first");
+  if(courses.length === 0) return alert("Add module first");
+
+  let title = document.getElementById("lessonTitle").value;
+  if(!title) return alert("Lesson title required");
+
+  courses[courses.length-1].lessons.push({
+    title: title,
+    video: document.getElementById("lessonVideo").value,
+    text: document.getElementById("lessonText").value
   });
+
+  render();
+  alert("Lesson added");
 }
 
-// ---------- Playground ----------
-function runPlayground() {
-  const code = document.getElementById('codeInput').value;
-  const iframe = document.getElementById('playground');
-  iframe.srcdoc = code;
-}
+// Save to GitHub
+async function saveToGitHub(){
+  if(!loggedIn) return alert("Login first");
 
-// ---------- Admin Functions ----------
-function addModule() {
-  if(!adminLoggedIn) { alert('Login first!'); return; }
-  const title = document.getElementById('moduleTitle').value;
-  const desc = document.getElementById('moduleDesc').value;
-  const free = document.getElementById('moduleFree').value === 'true';
-  if(!title) return alert('Module title required');
-  coursesData.push({title, desc, free, lessons:[]});
-  renderModules();
-  alert('Module added');
-}
+  const token = document.getElementById("githubToken").value.trim();
+  if(!token) return alert("Paste GitHub token");
 
-function addLesson() {
-  if(!adminLoggedIn) { alert('Login first!'); return; }
-  if(coursesData.length === 0) return alert('Add a module first');
-  const title = document.getElementById('lessonTitle').value;
-  const video = document.getElementById('lessonVideo').value;
-  const text = document.getElementById('lessonText').value;
-  if(!title) return alert('Lesson title required');
-  coursesData[coursesData.length-1].lessons.push({title, video, text});
-  renderModules();
-  alert('Lesson added to last module');
-}
-
-// ---------- Save to GitHub ----------
-async function saveToGitHub() {
-  if(!adminLoggedIn) { alert('Login first!'); return; }
-
-  const token = document.getElementById('githubToken').value.trim();
-  if(!token) return alert('Paste your GitHub token');
-
-  const repoOwner = 'Ray-Sage';
-  const repoName = 'AscendX';
-  const branch = 'main';
-  const filePath = 'courses.json';
+  const owner = "Ray-Sage";
+  const repo = "AscendX";
+  const branch = "main";
+  const path = "courses.json";
 
   try {
 
-    // STEP 1 — Try to get existing file
-    const resGet = await fetch(
-      `https://api.github.com/repos/${repoOwner}/${repoName}/contents/${filePath}?ref=${branch}`,
-      {
-        headers: { Authorization: `Bearer ${token}` }
-      }
+    // Get SHA (if file exists)
+    let sha = null;
+    let resGet = await fetch(
+      `https://api.github.com/repos/${owner}/${repo}/contents/${path}?ref=${branch}`,
+      { headers: { Authorization: `Bearer ${token}` } }
     );
 
-    let sha = null;
-
-    if (resGet.status === 200) {
-      const data = await resGet.json();
+    if(resGet.status === 200){
+      let data = await resGet.json();
       sha = data.sha;
     }
 
-    // STEP 2 — Create or Update file
-    const resPut = await fetch(
-      `https://api.github.com/repos/${repoOwner}/${repoName}/contents/${filePath}`,
+    // Create / Update file
+    let resPut = await fetch(
+      `https://api.github.com/repos/${owner}/${repo}/contents/${path}`,
       {
-        method: 'PUT',
+        method: "PUT",
         headers: {
           Authorization: `Bearer ${token}`,
-          'Content-Type': 'application/json'
+          "Content-Type": "application/json"
         },
         body: JSON.stringify({
-          message: 'Update courses.json',
-          content: btoa(JSON.stringify(coursesData, null, 2)),
-          sha: sha, // null if file doesn't exist
+          message: "Update courses.json",
+          content: btoa(JSON.stringify(courses, null, 2)),
+          sha: sha,
           branch: branch
         })
       }
     );
 
-    const result = await resPut.json();
+    let result = await resPut.json();
 
-    if (resPut.status === 200 || resPut.status === 201) {
-      alert('✅ Successfully saved to GitHub!');
+    if(resPut.status === 200 || resPut.status === 201){
+      alert("✅ Saved to GitHub successfully!");
     } else {
-      alert('❌ GitHub Error: ' + JSON.stringify(result));
+      alert("❌ GitHub Error: " + JSON.stringify(result));
     }
 
-  } catch (error) {
-    alert('🔥 Network/Error: ' + error.message);
+  } catch(e){
+    alert("🔥 Error: " + e.message);
   }
 }
-
-// Initial render
-renderModules();
 </script>
 
 </body>
