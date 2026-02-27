@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AscendX Learning</title>
+<style>
+  body{font-family:sans-serif;margin:0;padding:0;background:#f0f2f5;}
+  .wrap{padding:10px;max-width:600px;margin:auto;}
+  .card{background:white;padding:15px;margin:10px 0;border-radius:10px;box-shadow:0 2px 6px rgba(0,0,0,0.1);}
+  .btn{padding:8px 12px;border:none;border-radius:6px;cursor:pointer;}
+  .btn.primary{background:#1E3A8A;color:white;}
+  .btn.secondary{background:#ddd;color:#333;}
+  h2,h3{margin:8px 0;}
+  video, iframe{width:100%;border-radius:6px;}
+  .lesson-content{margin:8px 0;padding:6px;background:#f9f9f9;border-radius:6px;}
+</style>
+</head>
+<body>
+<div class="wrap" id="app-wrap">
+  <h2>AscendX Learning Platform</h2>
+  <div id="modules-container"></div>
+</div>
+
+<!-- Admin Login -->
+<div class="wrap" id="admin-login-wrap">
+  <div class="card" id="admin-login-card">
+    <h2>Admin Login</h2>
+    <input type="password" id="admin-password" placeholder="Enter Admin Password" style="width:100%;padding:8px;margin-top:6px;border-radius:6px;border:1px solid #ccc;">
+    <button id="admin-login-btn" class="btn primary" style="margin-top:8px;width:100%;">Login</button>
+  </div>
+</div>
+
+<!-- Admin Editor -->
+<div class="wrap" id="admin-editor-wrap" style="display:none;">
+  <div class="card">
+    <h2>Lesson Editor (Admin Only)</h2>
+    <label>Module Title</label>
+    <input type="text" id="module-title" style="width:100%;padding:6px;border-radius:6px;border:1px solid #ccc;">
+    <label>Module Description</label>
+    <input type="text" id="module-desc" style="width:100%;padding:6px;border-radius:6px;border:1px solid #ccc;">
+    <label>Lesson Title</label>
+    <input type="text" id="lesson-title" style="width:100%;padding:6px;border-radius:6px;border:1px solid #ccc;">
+    <label>Lesson Video URL</label>
+    <input type="text" id="lesson-video-url" style="width:100%;padding:6px;border-radius:6px;border:1px solid #ccc;">
+    <label>Lesson Content</label>
+    <textarea id="lesson-text" style="width:100%;height:100px;border-radius:6px;border:1px solid #ccc;padding:6px;"></textarea>
+    <div style="margin-top:8px;display:flex;gap:6px;flex-wrap:wrap;">
+      <button id="add-lesson-btn" class="btn primary">Add Lesson</button>
+      <button id="add-module-btn" class="btn secondary">Add Module</button>
+      <button id="save-changes-btn" class="btn primary">Save Changes</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// Config
+const ADMIN_PASSWORD="AscendX123"; // change if you want
+const GITHUB_TOKEN="YOUR_NEW_TOKEN";
+const REPO="ascendx-courses";
+const USERNAME="YOUR_GITHUB_USERNAME";
+const FILE_PATH="courses.json";
+
+// Admin login
+const adminLoginWrap=document.getElementById('admin-login-wrap');
+const adminEditorWrap=document.getElementById('admin-editor-wrap');
+document.getElementById('admin-login-btn').addEventListener('click',()=>{
+  const pass=document.getElementById('admin-password').value;
+  if(pass===ADMIN_PASSWORD){
+    adminLoginWrap.style.display='none';
+    adminEditorWrap.style.display='block';
+    alert('Welcome Admin!');
+  }else{alert('Incorrect password');}
+});
+
+// Temp storage
+let tempModules=[];
+
+// Load courses from GitHub JSON
+async function loadCourses(){
+  try{
+    const res = await fetch(`https://raw.githubusercontent.com/${USERNAME}/${REPO}/main/${FILE_PATH}`);
+    const data = await res.json();
+    tempModules = data.modules;
+    displayModules();
+  }catch(err){console.error(err);}
+}
+
+// Display modules
+function displayModules(){
+  const container=document.getElementById('modules-container');
+  container.innerHTML='';
+  tempModules.forEach(mod=>{
+    const card=document.createElement('div');card.className='card';
+    card.innerHTML=`<h3>${mod.title} ${mod.free?'':'(Premium)'}</h3>
+    <p>${mod.desc||''}</p>
+    <button class="btn primary" onclick="toggleLessons('${mod.id}')">Start Learning</button>
+    <div id="${mod.id}" style="display:none;margin-top:8px;"></div>`;
+    container.appendChild(card);
+    const lessonDiv=document.getElementById(mod.id);
+    mod.lessons.forEach(les=>{
+      const lesCard=document.createElement('div');lesCard.className='lesson-content';
+      lesCard.innerHTML=`<h4>${les.title}</h4>
+      ${les.video?`<iframe src="${les.video}" frameborder="0" allowfullscreen></iframe>`:''}
+      <p>${les.text||''}</p>`;
+      if(!mod.free){
+        const btn=document.createElement('button');btn.className='btn secondary';btn.textContent='Unlock Premium';
+        btn.onclick=()=>window.open('https://example.com'); // replace with your URL
+        lesCard.appendChild(btn);
+      }
+      lessonDiv.appendChild(lesCard);
+    });
+  });
+}
+
+window.toggleLessons=(id)=>{
+  const el=document.getElementById(id);
+  el.style.display=(el.style.display==='none')?'block':'none';
+};
+
+// Admin editor
+document.getElementById('add-module-btn').addEventListener('click',()=>{
+  const title=document.getElementById('module-title').value;
+  const desc=document.getElementById('module-desc').value;
+  if(!title){alert('Module title required');return;}
+  tempModules.push({id:'m'+Date.now(),title,desc,free:true,lessons:[]});
+  displayModules();
+  document.getElementById('module-title').value='';
+  document.getElementById('module-desc').value='';
+});
+
+document.getElementById('add-lesson-btn').addEventListener('click',()=>{
+  const title=document.getElementById('lesson-title').value;
+  const video=document.getElementById('lesson-video-url').value;
+  const text=document.getElementById('lesson-text').value;
+  if(!title||!video){alert('Lesson title and video required');return;}
+  if(!tempModules.length){alert('Add module first');return;}
+  tempModules[tempModules.length-1].lessons.push({title,video,text});
+  displayModules();
+  document.getElementById('lesson-title').value='';
+  document.getElementById('lesson-video-url').value='';
+  document.getElementById('lesson-text').value='';
+});
+
+// Save to GitHub
+document.getElementById('save-changes-btn').addEventListener('click',async()=>{
+  const content = btoa(JSON.stringify({modules: tempModules}, null, 2));
+  const body = {
+    message: "Update courses from mobile editor",
+    content,
+    branch: "main"
+  };
+  try{
+    const res = await fetch(`https://api.github.com/repos/${USERNAME}/${REPO}/contents/${FILE_PATH}`,{
+      method:'PUT',
+      headers:{
+        Authorization:`token ${GITHUB_TOKEN}`,
+        'Content-Type':'application/json'
+      },
+      body:JSON.stringify(body)
+    });
+    const data = await res.json();
+    alert('Changes saved to GitHub!');
+  }catch(err){console.error(err);}
+});
+
+// Initial load
+loadCourses();
+</script>
+</body>
+  </html>
