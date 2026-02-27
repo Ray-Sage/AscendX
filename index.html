@@ -140,6 +140,62 @@ function addLesson() {
 // ---------- Save to GitHub ----------
 async function saveToGitHub() {
   if(!adminLoggedIn) { alert('Login first!'); return; }
+
+  const token = document.getElementById('githubToken').value.trim();
+  if(!token) return alert('Paste your GitHub token');
+
+  const repoOwner = 'Ray-Sage';
+  const repoName = 'AscendX';
+  const branch = 'main';
+  const filePath = 'courses.json';
+
+  try {
+
+    // STEP 1 — Try to get existing file
+    const resGet = await fetch(
+      `https://api.github.com/repos/${repoOwner}/${repoName}/contents/${filePath}?ref=${branch}`,
+      {
+        headers: { Authorization: `Bearer ${token}` }
+      }
+    );
+
+    let sha = null;
+
+    if (resGet.status === 200) {
+      const data = await resGet.json();
+      sha = data.sha;
+    }
+
+    // STEP 2 — Create or Update file
+    const resPut = await fetch(
+      `https://api.github.com/repos/${repoOwner}/${repoName}/contents/${filePath}`,
+      {
+        method: 'PUT',
+        headers: {
+          Authorization: `Bearer ${token}`,
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          message: 'Update courses.json',
+          content: btoa(JSON.stringify(coursesData, null, 2)),
+          sha: sha, // null if file doesn't exist
+          branch: branch
+        })
+      }
+    );
+
+    const result = await resPut.json();
+
+    if (resPut.status === 200 || resPut.status === 201) {
+      alert('✅ Successfully saved to GitHub!');
+    } else {
+      alert('❌ GitHub Error: ' + JSON.stringify(result));
+    }
+
+  } catch (error) {
+    alert('🔥 Network/Error: ' + error.message);
+  }
+}
   const token = document.getElementById('githubToken').value.trim();
   if(!token) return alert('Paste your GitHub token');
 
