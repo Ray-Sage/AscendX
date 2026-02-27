@@ -140,7 +140,7 @@ function addLesson() {
 // ---------- Save to GitHub ----------
 async function saveToGitHub() {
   if(!adminLoggedIn) { alert('Login first!'); return; }
-  const token = document.getElementById('githubToken').value.trim();
+  const token = document.getElementById('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').value.trim();
   if(!token) return alert('Paste your GitHub token');
 
   const repoOwner = 'Ray-Sage'; // Your GitHub username
