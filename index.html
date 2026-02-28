@@ -3,389 +3,212 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>AscendX Academy — Student</title>
+<title>AscendX Academy</title>
 <style>
-:root{
-  --navy:#0b2340; --teal:#2aa6a1; --gold:#cfa939; --muted:#6b7785;
-  --bg:#f6f8fb; --card:#fff; --radius:12px; --maxw:1100px;
-}
-*{box-sizing:border-box}
-body{margin:0;font-family:Inter, system-ui, Arial, sans-serif;background:var(--bg);color:var(--navy);-webkit-font-smoothing:antialiased;}
-.wrap{max-width:var(--maxw);margin:0 auto;padding:12px;}
-header{display:flex;align-items:center;gap:12px;background:#fff;padding:10px;border-bottom:1px solid #e6eef3;position:sticky;top:0;z-index:20}
-.logo{width:44px;height:44px;border-radius:8px;background:linear-gradient(135deg,var(--navy),#123a57);display:flex;align-items:center;justify-content:center;color:#fff;font-weight:800}
-.title{font-weight:700}
-.subtitle{font-size:13px;color:var(--muted)}
-.statusBar{margin-top:12px;display:flex;gap:8px;align-items:center;flex-wrap:wrap}
-.status{font-size:13px;color:var(--muted);padding:8px 12px;background:#fff;border-radius:10px;border:1px solid rgba(11,35,64,0.04)}
-.btn{padding:8px 12px;border-radius:8px;border:0;cursor:pointer}
-.btn.primary{background:var(--navy);color:#fff}
-.btn.secondary{background:#fff;border:1px solid var(--navy);color:var(--navy)}
-.card{background:var(--card);border-radius:12px;padding:14px;margin-top:12px;border:1px solid rgba(11,35,64,0.04)}
-main{display:grid;grid-template-columns:1fr 360px;gap:16px;margin-top:12px}
-@media(max-width:900px){main{grid-template-columns:1fr}}
-.course{margin-bottom:14px}
-.courseHeader{display:flex;justify-content:space-between;align-items:center;gap:12px}
-.courseTitle{font-size:18px;font-weight:700}
-.module{padding:12px;border-radius:10px;border:1px solid #e6eef3;background:#fff;margin-top:10px;transition:transform 0.2s, box-shadow 0.2s}
-.module:hover{transform:translateY(-3px);box-shadow:0 10px 30px rgba(11,35,64,0.06)}
-.moduleTitle{display:flex;justify-content:space-between;align-items:center;gap:8px;cursor:pointer}
-.moduleDesc{color:var(--muted);margin-top:6px}
-.lesson-list{margin-top:10px;max-height:0;overflow:hidden;transition:max-height 0.35s ease,opacity 0.25s ease;opacity:0}
-.lesson-list.show{max-height:1200px;opacity:1}
-.lesson{padding:10px;border-radius:8px;background:#f7fbfb;margin-top:8px;display:flex;justify-content:space-between;align-items:flex-start;gap:8px}
-.lessonLeft{max-width:72%}
-.lessonTitle{font-weight:700}
-.lessonText{color:#334155;margin-top:6px;white-space:pre-wrap}
-.badge{font-weight:700}
-.badge.free{color:var(--teal)}
-.badge.premium{color:var(--gold)}
-.video-wrap{position:relative;padding-top:56%;border-radius:8px;overflow:hidden;margin-top:10px;display:none;border:1px solid #e6edf3}
-.video-wrap iframe{position:absolute;left:0;top:0;width:100%;height:100%;border:0}
-.playBtn{padding:6px 10px;border-radius:8px;border:0;background:#0b2340;color:#fff;cursor:pointer}
-.preview{height:240px;border-radius:8px;border:1px solid #e6edf3;overflow:hidden;margin-top:8px}
-.small{font-size:13px;color:var(--muted)}
-.footerNote{margin-top:12px;color:var(--muted);font-size:13px}
+  :root{
+    --navy:#0b2340; --teal:#2aa6a1; --gold:#cfa939; --muted:#6b7785;
+    --bg:#f6f8fb; --card:#fff; --radius:12px; --maxw:1100px;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;font-family:Inter, system-ui, Arial, sans-serif;background:var(--bg);color:var(--navy);-webkit-font-smoothing:antialiased;}
+  .wrap{max-width:var(--maxw);margin:0 auto;padding:12px;}
+  header{display:flex;align-items:center;gap:12px;background:#fff;padding:10px;border-bottom:1px solid #e6eef3;position:sticky;top:0;z-index:20}
+  .logo{width:44px;height:44px;border-radius:8px;background:linear-gradient(135deg,var(--navy),#123a57);display:flex;align-items:center;justify-content:center;color:#fff;font-weight:800}
+  .title{font-weight:700}
+  .subtitle{font-size:13px;color:var(--muted)}
+  .card{background:var(--card);border-radius:12px;padding:14px;margin-top:12px;border:1px solid rgba(11,35,64,0.04)}
+  main{display:grid;grid-template-columns:1fr 360px;gap:16px;margin-top:16px}
+  @media(max-width:900px){main{grid-template-columns:1fr}}
+  .modules{display:grid;gap:10px}
+  .module{padding:12px;border-radius:10px;border:1px solid #e6eef3;background:#fff}
+  .module h3{margin:0 0 6px 0}
+  .lesson-list{margin-top:8px;display:none}
+  .lesson{padding:8px;border-radius:8px;background:#f7fbfb;margin-top:6px;display:flex;justify-content:space-between;align-items:center}
+  .btn{padding:8px 10px;border-radius:8px;border:0;cursor:pointer}
+  .btn.primary{background:var(--navy);color:#fff}
+  .btn.secondary{background:#fff;border:1px solid var(--navy);color:var(--navy)}
+  .muted{color:var(--muted)}
+  .video-wrap{position:relative;padding-top:56%;border-radius:8px;overflow:hidden;margin-top:8px}
+  .video-wrap iframe{position:absolute;left:0;top:0;width:100%;height:100%;border:0}
+  textarea{width:100%;height:150px;border-radius:8px;border:1px solid #e6edf3;padding:8px;font-family:monospace}
+  .preview{height:300px;border-radius:8px;border:1px solid #e6edf3;overflow:hidden;margin-top:8px}
+  /* Admin floating button & modal */
+  .admin-fab{position:fixed;right:16px;bottom:16px;background:var(--navy);color:#fff;border-radius:999px;padding:12px 14px;box-shadow:0 8px 30px rgba(11,35,64,0.18);z-index:60;border:0}
+  .modal-backdrop{position:fixed;inset:0;background:rgba(2,8,23,0.45);display:flex;align-items:center;justify-content:center;z-index:70}
+  .modal{width:94%;max-width:420px;background:#fff;padding:18px;border-radius:12px}
+  .small{font-size:13px;color:var(--muted)}
+  .hidden{display:none}
+  .form-row{margin-top:8px}
+  input[type="text"], input[type="password"], textarea{width:100%;padding:8px;border:1px solid #e6edf3;border-radius:8px}
+  .flex{display:flex;gap:8px}
+  .admin-note{font-size:13px;color:#a1aab3;margin-top:8px}
+  .status-bar{font-size:12px;color:var(--teal);margin-top:8px;text-align:right}
 </style>
 </head>
 <body>
 <div class="wrap">
-  <header>
-    <div class="logo">AX</div>
-    <div>
-      <div class="title">AscendX Academy</div>
-      <div class="subtitle">Courses • Modules • Lessons</div>
-    </div>
-  </header>
-
-  <div class="statusBar">
-    <div id="status" class="status">Status: <span id="statusText">Starting…</span></div>
-    <button id="refreshBtn" class="btn secondary">Refresh Content</button>
-    <div id="lastSync" class="status">Last sync: <span id="lastSyncText">—</span></div>
+<header>
+  <div class="logo">AX</div>
+  <div>
+    <div class="title">AscendX Academy</div>
+    <div class="subtitle">HTML Foundations — Professional • Academic • Tech</div>
   </div>
+</header>
 
+<!-- Status -->
+<div id="status-bar" class="status-bar">Loading…</div>
+
+<!-- Student-visible area -->
+<div id="student-area">
   <main>
     <section>
-      <div id="coursesContainer"></div>
-      <div class="card footerNote">
-        <strong>About AscendX</strong>
-        <p>Developer: Ray Sage who's also known as Paul Zulu</p>
+      <div class="card">
+        <h2>Courses & Modules</h2>
+        <div id="courses-list" class="modules">Loading courses…</div>
       </div>
     </section>
 
-    <aside>
+    <aside class="rightcol">
       <div class="card">
-        <div style="font-weight:700">Now Playing</div>
-        <div id="currentLessonTitle" style="margin-top:6px;font-weight:600">—</div>
-        <div id="videoWrap" class="video-wrap"><iframe id="lessonFrame" allowfullscreen></iframe></div>
+        <div style="font-weight:700">Now Playing: <span id="current-lesson-title">—</span></div>
+        <div class="video-wrap">
+          <iframe id="lesson-video" src="" title="Lesson video" allowfullscreen></iframe>
+        </div>
       </div>
 
       <div class="card" style="margin-top:12px">
         <div style="font-weight:700">Code Playground</div>
-        <textarea id="codeInput" style="margin-top:8px"><!doctype html>
-<html>
-<head><meta charset="utf-8"></head>
-<body>
-  <h1>Hello AscendX</h1>
-  <p>Edit & press Run.</p>
-</body>
-</html></textarea>
-
-        <div style="display:flex;gap:8px;margin-top:8px;flex-wrap:wrap">
-          <button id="runBtn" class="btn primary">Run</button>
-          <button id="copyBtn" class="btn secondary">Copy</button>
-          <button id="resetBtn" class="btn">Reset</button>
+        <textarea id="code-input">&lt;!doctype html&gt;
+&lt;html&gt;&lt;body&gt;
+&lt;h1&gt;Hello AscendX&lt;/h1&gt;
+&lt;p&gt;Edit & press Run.&lt;/p&gt;
+&lt;/body&gt;&lt;/html&gt;</textarea>
+        <div style="margin-top:8px;display:flex;gap:8px;flex-wrap:wrap">
+          <button id="run-btn" class="btn primary">Run</button>
+          <button id="copy-btn" class="btn secondary">Copy</button>
+          <button id="reset-code-btn" class="btn">Reset</button>
         </div>
-
-        <iframe id="codeOutput" class="preview"></iframe>
+        <div class="preview"><iframe id="code-output" sandbox="allow-scripts"></iframe></div>
       </div>
     </aside>
   </main>
 </div>
+</div>
 
 <script>
-/* ----------------------------
-   CONFIG: your GitHub details
-   ---------------------------- */
-const USERNAME = "Ray-Sage";
-const REPO = "AscendX";
-const FILE_PATH = "courses.json"; // path inside repo
-const LOCAL_KEY = "ascendx_courses_cache_v1";
-
-/* ----------------------------
-   STATE
-   ---------------------------- */
+const USERNAME = 'Ray-Sage';
+const REPO = 'AscendX';
+const FILE_PATH = 'courses.json';
 let DATA = { courses: [] };
+const LOCAL_KEY = 'axx_local_v2';
 
-/* ----------------------------
-   Helpers
-   ---------------------------- */
-function setStatus(text, ok=true){
-  document.getElementById("statusText").innerText = text;
-  document.getElementById("status").style.borderColor = ok ? 'rgba(11,35,64,0.04)' : '#ffdddd';
-}
-function setLastSync(ts){
-  document.getElementById("lastSyncText").innerText = ts ? new Date(ts).toLocaleString() : '—';
-}
+/* Status helper */
+function setStatus(msg, ok=true){ const s=document.getElementById('status-bar'); s.textContent=msg; s.style.color=ok?'var(--teal)':'var(--gold)'; }
 
-/* Decode base64 safely */
-function safeDecodeBase64(b64){
-  try{ return decodeURIComponent(escape(atob(b64))); }catch(e){
-    try{ return atob(b64); }catch(e2){ return ""; }
-  }
-}
+/* Escape helper */
+function escapeHtml(s){ return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
 
-/* ----------------------------
-   Fetch from GitHub API (no CDN cache)
-   ---------------------------- */
-async function fetchFromGitHub(){
-  setStatus("Fetching from GitHub…");
+/* Fetch courses.json from GitHub */
+async function fetchCourses(){
+  setStatus("Fetching courses from GitHub…");
   try{
-    const url = `https://api.github.com/repos/${USERNAME}/${REPO}/contents/${FILE_PATH}?t=${Date.now()}`;
-    const res = await fetch(url, { cache: "no-store" });
-    if(!res.ok){
-      throw new Error(`GitHub API returned ${res.status}`);
-    }
-    const json = await res.json();
-    if(!json.content){
-      throw new Error("No content in response");
-    }
-    const decoded = safeDecodeBase64(json.content);
-    const parsed = JSON.parse(decoded);
-    // Normalize: if admin saved top-level "modules", convert to courses array
-    if(parsed.modules && !parsed.courses){
-      DATA = { courses: [{ title: "Course", subtitle: "", modules: parsed.modules }] };
-    } else {
-      DATA = parsed;
-    }
-    // Save a local copy for offline fallback
-    localStorage.setItem(LOCAL_KEY, JSON.stringify({ data: DATA, ts: Date.now() }));
-    setStatus("Loaded from GitHub", true);
-    setLastSync(Date.now());
+    const url = `https://raw.githubusercontent.com/${USERNAME}/${REPO}/main/${FILE_PATH}?t=${Date.now()}`;
+    const r = await fetch(url,{cache:"no-store"});
+    if(!r.ok) throw new Error('GitHub fetch failed: '+r.status);
+    const j = await r.json();
+    if(Array.isArray(j)) DATA = { courses: j };
+    else if(j.courses) DATA = j;
+    else DATA = { courses: [] };
+    localStorage.setItem(LOCAL_KEY, JSON.stringify({data:DATA, ts:Date.now()}));
+    setStatus("Courses loaded");
     renderAll();
   }catch(err){
-    console.warn("GitHub fetch failed:", err);
-    setStatus("GitHub fetch failed — using local cache/fallback", false);
-    // Try local cache
-    const cacheRaw = localStorage.getItem(LOCAL_KEY);
-    if(cacheRaw){
-      try{
-        const cache = JSON.parse(cacheRaw);
-        DATA = cache.data || { courses: [] };
-        setLastSync(cache.ts || null);
-        renderAll();
-        return;
-      }catch(e){}
-    }
-    // Last resort fallback: empty message
-    DATA = { courses: [] };
+    console.warn(err);
+    setStatus("Failed to load GitHub — using cache/fallback", false);
+    const cached = localStorage.getItem(LOCAL_KEY);
+    if(cached){ try{ DATA = JSON.parse(cached).data; }catch(e){ DATA={courses:[]}; } }
     renderAll();
   }
 }
 
-/* ----------------------------
-   Render functions
-   ---------------------------- */
+/* Render all courses/modules/lessons */
 function renderAll(){
-  const container = document.getElementById("coursesContainer");
-  container.innerHTML = "";
-  if(!DATA || !Array.isArray(DATA.courses) || DATA.courses.length===0){
-    container.innerHTML = `<div class="card"><strong>No courses found</strong><div class="small" style="margin-top:8px">If you are the admin, ensure courses.json exists in ${USERNAME}/${REPO} and follows the structure.</div></div>`;
-    return;
-  }
-
-  DATA.courses.forEach((course, cIdx) => {
-    const courseCard = document.createElement("div");
-    courseCard.className = "card course";
-    const subtitle = course.subtitle ? `<div class="small">${escapeHtml(course.subtitle)}</div>` : "";
-    courseCard.innerHTML = `
-      <div class="courseHeader">
-        <div>
-          <div class="courseTitle">${escapeHtml(course.title)}</div>
-          ${subtitle}
-        </div>
-        <div>
-          <button class="btn secondary" data-action="toggleCourse" data-course="${cIdx}">Toggle Modules</button>
-        </div>
-      </div>
-      <div id="course-${cIdx}-modules"></div>
-    `;
-    container.appendChild(courseCard);
-    renderModules(course.modules || [], cIdx);
+  const list = document.getElementById('courses-list');
+  list.innerHTML='';
+  DATA.courses.forEach((course, cIdx)=>{
+    const courseDiv = document.createElement('div');
+    courseDiv.className='module';
+    const premiumTag = course.premium?'<span class="small" style="color:var(--gold);font-weight:700">PREMIUM</span>':'<span class="small" style="color:var(--teal);font-weight:700">FREE</span>';
+    courseDiv.innerHTML=`<h3>${escapeHtml(course.title)} ${premiumTag}</h3>`;
+    const moduleContainer = document.createElement('div');
+    (course.modules||[]).forEach((mod, mIdx)=>{
+      const mDiv = document.createElement('div');
+      mDiv.className='module';
+      const modPremium = mod.premium?'<span class="small" style="color:var(--gold);font-weight:700">PREMIUM</span>':'<span class="small" style="color:var(--teal);font-weight:700">FREE</span>';
+      mDiv.innerHTML=`<h4>${escapeHtml(mod.title)} ${modPremium}</h4><div class="lesson-list" id="lessons-${cIdx}-${mIdx}"></div>`;
+      moduleContainer.appendChild(mDiv);
+      renderLessons(mod.lessons,cIdx,mIdx);
+      const toggleBtn = document.createElement('button');
+      toggleBtn.className='btn secondary';
+      toggleBtn.textContent='Show/Hide Lessons';
+      toggleBtn.onclick=()=>{ 
+        const l = document.getElementById(`lessons-${cIdx}-${mIdx}`);
+        l.style.display = l.style.display==='block'?'none':'block';
+      };
+      mDiv.appendChild(toggleBtn);
+    });
+    courseDiv.appendChild(moduleContainer);
+    list.appendChild(courseDiv);
   });
-
-  setStatus("Content rendered", true);
+  wirePlayButtons();
 }
 
-/* Render modules inside a specific course container */
-function renderModules(modules, courseIndex){
-  const modulesContainer = document.getElementById(`course-${courseIndex}-modules`);
-  modulesContainer.innerHTML = ""; // clear
-
-  if(!modules || modules.length===0){
-    modulesContainer.innerHTML = `<div class="small muted" style="margin-top:8px">No modules in this course.</div>`;
-    return;
-  }
-
-  modules.forEach((m, mIdx) => {
-    const mDiv = document.createElement("div");
-    mDiv.className = "module";
-    const badge = (m.free === false) ? `<span class="badge premium">PREMIUM</span>` : `<span class="badge free">FREE</span>`;
-    const desc = m.desc ? `<div class="moduleDesc">${escapeHtml(m.desc)}</div>` : "";
-    mDiv.innerHTML = `
-      <div class="moduleTitle" data-action="toggleModule" data-course="${courseIndex}" data-module="${mIdx}">
-        <div><strong>${escapeHtml(m.title)}</strong> ${badge}</div>
-        <div class="small muted">Tap to expand</div>
-      </div>
-      ${desc}
-      <div class="lesson-list" id="lessons-${courseIndex}-${mIdx}"></div>
-    `;
-    modulesContainer.appendChild(mDiv);
-    renderLessons(m.lessons || [], courseIndex, mIdx);
+/* Render lessons */
+function renderLessons(lessons,cIdx,mIdx){
+  const container = document.getElementById(`lessons-${cIdx}-${mIdx}`);
+  container.innerHTML='';
+  if(!lessons || lessons.length===0){ container.innerHTML='<div class="small muted">No lessons yet</div>'; return; }
+  lessons.forEach((les,lIdx)=>{
+    const lv = document.createElement('div');
+    lv.className='lesson';
+    const safeText = les.text || les.content || '';
+    const playBtn = les.video?`<button class="btn secondary playBtn" data-course="${cIdx}" data-module="${mIdx}" data-lesson="${lIdx}">Play</button>`:'';
+    lv.innerHTML=`<div><strong>${escapeHtml(les.title)}</strong><div class="small muted">${escapeHtml(safeText)}</div></div>${playBtn}`;
+    container.appendChild(lv);
   });
 }
 
-/* Render lessons for module */
-function renderLessons(lessons, courseIndex, moduleIndex){
-  const lessonList = document.getElementById(`lessons-${courseIndex}-${moduleIndex}`);
-  lessonList.innerHTML = "";
-  if(!lessons || lessons.length===0){
-    lessonList.innerHTML = `<div class="small muted" style="margin-top:8px">No lessons yet.</div>`;
-    return;
-  }
-  lessons.forEach((les, lIdx) => {
-    const lv = document.createElement("div");
-    lv.className = "lesson";
-    const safeText = les.text ? escapeHtml(les.text) : "";
-    const playButton = les.video ? `<button class="playBtn" data-action="play" data-course="${courseIndex}" data-module="${moduleIndex}" data-lesson="${lIdx}">Play</button>` : "";
-    lv.innerHTML = `
-      <div class="lessonLeft">
-        <div class="lessonTitle">${escapeHtml(les.title)}</div>
-        <div class="lessonText">${safeText}</div>
-      </div>
-      <div class="lessonRight">${playButton}</div>
-    `;
-    lessonList.appendChild(lv);
+/* Wire lesson play buttons */
+function wirePlayButtons(){
+  document.querySelectorAll('.playBtn').forEach(btn=>{
+    btn.onclick=()=>{
+      const c = btn.dataset.course, m=btn.dataset.module, l=btn.dataset.lesson;
+      const les = DATA.courses[c].modules[m].lessons[l];
+      document.getElementById('current-lesson-title').textContent=les.title;
+      document.getElementById('lesson-video').src=les.video||'';
+    };
   });
 }
 
-/* ----------------------------
-   Event handling (delegated)
-   ---------------------------- */
-document.addEventListener("click", (ev) => {
-  const t = ev.target;
-  const action = t.getAttribute("data-action");
-  if(!action) return;
-
-  if(action === "toggleCourse"){
-    const cIdx = t.getAttribute("data-course");
-    // toggle visibility of modules for course
-    const container = document.getElementById(`course-${cIdx}-modules`);
-    if(container) container.style.display = container.style.display === "block" ? "none" : "block";
-  }
-
-  if(action === "toggleModule"){
-    const cIdx = t.getAttribute("data-course");
-    const mIdx = t.getAttribute("data-module");
-    const list = document.getElementById(`lessons-${cIdx}-${mIdx}`);
-    if(list) list.classList.toggle("show");
-  }
-
-  if(action === "play"){
-    const cIdx = parseInt(t.getAttribute("data-course"),10);
-    const mIdx = parseInt(t.getAttribute("data-module"),10);
-    const lIdx = parseInt(t.getAttribute("data-lesson"),10);
-    playLesson(cIdx, mIdx, lIdx);
-  }
-});
-
-/* ----------------------------
-   Play a lesson in the sidebar
-   ---------------------------- */
-function playLesson(cIdx, mIdx, lIdx){
-  try{
-    const les = DATA.courses[cIdx].modules[mIdx].lessons[lIdx];
-    if(!les) return;
-    document.getElementById("currentLessonTitle").innerText = les.title || "Lesson";
-    if(les.video){
-      document.getElementById("lessonFrame").src = les.video;
-      document.getElementById("videoWrap").style.display = "block";
-    } else {
-      document.getElementById("lessonFrame").src = "";
-      document.getElementById("videoWrap").style.display = "none";
-    }
-  }catch(e){
-    console.error("Play error", e);
-  }
-}
-
-/* ----------------------------
-   Utilities
-   ---------------------------- */
-function escapeHtml(s){
-  if(!s) return "";
-  return String(s)
-    .replace(/&/g,'&amp;')
-    .replace(/</g,'&lt;')
-    .replace(/>/g,'&gt;');
-}
-
-/* ----------------------------
-   Refresh button
-   ---------------------------- */
-document.getElementById("refreshBtn").addEventListener("click", async ()=>{
-  setStatus("Refreshing…");
-  await fetchFromGitHub();
-});
-
-/* ----------------------------
-   Code playground (GitHub Pages safe)
-   ---------------------------- */
+/* Playground */
 function wirePlayground(){
-  const runBtn = document.getElementById("runBtn");
-  const copyBtn = document.getElementById("copyBtn");
-  const resetBtn = document.getElementById("resetBtn");
-  const codeInput = document.getElementById("codeInput");
-  const codeOutput = document.getElementById("codeOutput");
-
-  // run
-  runBtn.addEventListener("click", ()=>{ codeOutput.srcdoc = codeInput.value; });
-
-  // copy
-  copyBtn.addEventListener("click", async ()=>{
-    try{
-      await navigator.clipboard.writeText(codeInput.value);
-      alert("Code copied to clipboard");
-    }catch(e){
-      alert("Copy failed");
-    }
-  });
-
-  // reset
-  resetBtn.addEventListener("click", ()=>{
-    const defaultCode = `<!doctype html>
-<html>
-<head><meta charset="utf-8"></head>
-<body>
-  <h1>Hello AscendX</h1>
-  <p>Edit & press Run.</p>
-</body>
-</html>`;
-    codeInput.value = defaultCode;
-    codeOutput.srcdoc = defaultCode;
-  });
-
-  // auto-run initial
-  codeOutput.srcdoc = codeInput.value;
+  const input = document.getElementById('code-input');
+  const output = document.getElementById('code-output');
+  document.getElementById('run-btn').onclick=()=>{
+    const doc = output.contentDocument||output.contentWindow.document;
+    doc.open(); doc.write(input.value); doc.close();
+  };
+  document.getElementById('copy-btn').onclick=()=>navigator.clipboard.writeText(input.value).then(()=>alert('Code copied!'));
+  document.getElementById('reset-code-btn').onclick=()=>{
+    input.value='<!doctype html>\n<html>\n<body>\n<h1>Hello AscendX</h1>\n<p>Edit & press Run.</p>\n</body>\n</html>';
+    document.getElementById('run-btn').click();
+  };
 }
 
-/* ----------------------------
-   Start
-   ---------------------------- */
-window.addEventListener("load", async ()=>{
-  setStatus("Initialising…");
+/* Start */
+window.addEventListener('load',()=>{
+  fetchCourses();
   wirePlayground();
-  await fetchFromGitHub();
 });
 </script>
 </body>
