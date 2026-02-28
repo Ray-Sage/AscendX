@@ -1,20 +1,3 @@
 [
-  {
-    "title": "HTML",
-    "premium": false,
-    "modules": [
-      {
-        "title": "Basics",
-        "premium": false,
-        "lessons": [
-          {
-            "title": "Understandinh",
-            "content": "Jdjdhrheh",
-            "video": "",
-            "premium": false
-          }
-        ]
-      }
-    ]
-  }
+
 ]
