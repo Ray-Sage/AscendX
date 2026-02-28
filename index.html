@@ -43,8 +43,6 @@ button{
   margin-top:6px;
 }
 
-button:hover{opacity:.9;}
-
 input,textarea{
   width:100%;
   padding:8px;
@@ -80,12 +78,16 @@ to{transform:translateY(100vh) rotate(720deg);opacity:0;}
 
 <div class="container">
 
+<!-- ADMIN LOGIN -->
 <div class="card">
 <h3>🔑 Admin Login</h3>
 <input type="password" id="adminPass" placeholder="Admin Password">
 <button onclick="adminLogin()">Login</button>
 <p id="adminStatus"></p>
 </div>
+
+<!-- ADMIN ONLY PANEL -->
+<div id="adminPanel" style="display:none;">
 
 <div class="card">
 <h3>🔐 GitHub Token</h3>
@@ -95,12 +97,14 @@ to{transform:translateY(100vh) rotate(720deg);opacity:0;}
 <p id="tokenStatus"></p>
 </div>
 
-<div class="card" id="createPanel" style="display:none;">
-<h3>➕ Create / Edit Lesson</h3>
+<div class="card">
+<h3>➕ Create Lesson</h3>
 <input id="lessonTitle" placeholder="Lesson Title">
 <textarea id="lessonContent" placeholder="Lesson Content"></textarea>
 <label><input type="checkbox" id="isPremium"> Premium</label><br>
 <button onclick="addLesson()">Save Lesson</button>
+</div>
+
 </div>
 
 <div class="card">
@@ -117,18 +121,6 @@ to{transform:translateY(100vh) rotate(720deg);opacity:0;}
 
 <div id="lessonList"></div>
 
-<div class="card">
-<h3>🎓 Certificate</h3>
-<input id="studentName" placeholder="Enter your name">
-<button onclick="generateCertificate()">Generate Certificate</button>
-</div>
-
-<div class="card">
-<h3>💾 Backup</h3>
-<button onclick="exportBackup()">Export Backup</button>
-<input type="file" onchange="importBackup(event)">
-</div>
-
 </div>
 
 <script>
@@ -143,13 +135,12 @@ let premiumUnlocked=localStorage.getItem("premium")||false;
 let admin=false;
 let editingIndex=null;
 
-document.getElementById("tokenInput").value=token;
-
 function adminLogin(){
 if(document.getElementById("adminPass").value==="admin123"){
 admin=true;
-document.getElementById("createPanel").style.display="block";
+document.getElementById("adminPanel").style.display="block";
 document.getElementById("adminStatus").innerText="✅ Admin Logged In";
+document.getElementById("tokenInput").value=token;
 }else alert("Wrong password");
 }
 
@@ -165,16 +156,11 @@ let content=lessonContent.value;
 let premium=isPremium.checked;
 if(!title||!content) return alert("Fill all fields");
 
-if(editingIndex!==null){
-lessons[editingIndex]={title,content,premium};
-editingIndex=null;
-}else{
 lessons.push({title,content,premium});
-}
-
 localStorage.setItem("lessons",JSON.stringify(lessons));
 autoSaveGitHub();
 renderLessons();
+
 lessonTitle.value="";lessonContent.value="";isPremium.checked=false;
 }
 
@@ -191,52 +177,13 @@ card.className="card";
 if(lesson.premium) card.innerHTML+="<div class='premiumTag'>⭐ PREMIUM</div>";
 card.innerHTML+=`<h3>${lesson.title}</h3>`;
 
-if(lesson.premium&&!premiumUnlocked){
-card.innerHTML+=`<div class='locked'>
-🔒 Premium Locked<br>
-<button onclick="unlockPremium()">Unlock</button>
-</div>`;
-}else{
 card.innerHTML+=`<p>${lesson.content}</p>
-<button onclick="markComplete(${i})">Complete</button>
-<button onclick="downloadPDF('${lesson.title}','${lesson.content}')">PDF</button>`;
-}
-
-if(admin){
-card.innerHTML+=`
-<button onclick="editLesson(${i})">Edit</button>
-<button onclick="deleteLesson(${i})">Delete</button>`;
-}
+<button onclick="markComplete(${i})">Complete</button>`;
 
 lessonList.appendChild(card);
 });
 
 updateProgress();
-}
-
-function editLesson(i){
-lessonTitle.value=lessons[i].title;
-lessonContent.value=lessons[i].content;
-isPremium.checked=lessons[i].premium;
-editingIndex=i;
-}
-
-function deleteLesson(i){
-if(confirm("Delete lesson?")){
-lessons.splice(i,1);
-localStorage.setItem("lessons",JSON.stringify(lessons));
-autoSaveGitHub();
-renderLessons();
-}
-}
-
-function unlockPremium(){
-let code=prompt("Enter Premium Code:");
-if(code==="premium123"){
-premiumUnlocked=true;
-localStorage.setItem("premium",true);
-renderLessons();
-}else alert("Wrong code");
 }
 
 function markComplete(i){
@@ -254,7 +201,7 @@ progressFill.style.width=percent+"%";
 }
 
 function confetti(){
-for(let i=0;i<30;i++){
+for(let i=0;i<25;i++){
 let c=document.createElement("div");
 c.className="confetti";
 c.style.left=Math.random()*100+"vw";
@@ -264,58 +211,20 @@ setTimeout(()=>c.remove(),2000);
 }
 }
 
-function downloadPDF(title,content){
-let w=window.open("");
-w.document.write(`<div style="padding:40px;font-family:sans-serif;">
-<h1>${title}</h1><hr><p>${content}</p></div>`);
-w.print();
-}
-
-function generateCertificate(){
-let name=studentName.value;
-if(!name) return alert("Enter name");
-let w=window.open("");
-w.document.write(`
-<div style="text-align:center;padding:60px;font-family:serif;">
-<h1 style="font-size:40px;">Certificate of Completion</h1>
-<hr>
-<h2>This certifies that</h2>
-<h1 style="color:#6366f1;">${name}</h1>
-<h3>has successfully completed AscendX Program</h3>
-<p>Date: ${new Date().toLocaleDateString()}</p>
-</div>`);
-w.print();
-}
-
-function exportBackup(){
-let dataStr="data:text/json;charset=utf-8,"+encodeURIComponent(JSON.stringify(lessons));
-let dl=document.createElement("a");
-dl.href=dataStr;
-dl.download="ascendx_backup.json";
-dl.click();
-}
-
-function importBackup(e){
-let file=e.target.files[0];
-let reader=new FileReader();
-reader.onload=function(){
-lessons=JSON.parse(reader.result);
-localStorage.setItem("lessons",JSON.stringify(lessons));
-renderLessons();
-};
-reader.readAsText(file);
-}
-
 async function autoSaveGitHub(){
 if(!token) return;
 
 let content=btoa(JSON.stringify(lessons,null,2));
+let sha=null;
 
 let res=await fetch(`https://api.github.com/repos/${owner}/${repo}/contents/${path}`,{
 headers:{Authorization:"token "+token}
 });
+
+if(res.status===200){
 let data=await res.json();
-let sha=data.sha;
+sha=data.sha;
+}
 
 await fetch(`https://api.github.com/repos/${owner}/${repo}/contents/${path}`,{
 method:"PUT",
@@ -333,9 +242,16 @@ sha:sha
 
 async function loadFromGitHub(){
 if(!token) return alert("Save token first");
+
 let res=await fetch(`https://api.github.com/repos/${owner}/${repo}/contents/${path}`,{
 headers:{Authorization:"token "+token}
 });
+
+if(res.status!==200){
+alert("No lessons.json found yet.");
+return;
+}
+
 let data=await res.json();
 let decoded=atob(data.content);
 lessons=JSON.parse(decoded);
