@@ -1,8 +1,60 @@
 [
   {
-    "title": "HTML Basics",
-    "desc": "In this module you will learn some basics needed for an HTML student or anyone who wants to learn ",
-    "free": true,
-    "lessons": []
+    "title": "HTML and Web Development",
+    "premium": false,
+    "modules": [
+      {
+        "title": "HTML Basics and the Web",
+        "premium": false,
+        "lessons": [
+          {
+            "title": "What is the web?",
+            "content": "The web Also known as www is didhifhdudhhd",
+            "video": "",
+            "premium": false
+          },
+          {
+            "title": "What is HTML",
+            "content": "Hy rjdgid ridge road block of the world 🌎 I can get it now and see if they have to pay again I repeat in caps and you can I make ",
+            "video": "",
+            "premium": false
+          },
+          {
+            "title": "How many are you",
+            "content": "I'm not that sure is it possible to make sure you are welcome to join us if you want to apply for a job opportunity in the morning so far so I can get wat do you know what time you want me to make sure all the way to see if ",
+            "video": "",
+            "premium": false
+          },
+          {
+            "title": "Whi",
+            "content": "Hfhgg",
+            "video": "Hfuytt",
+            "premium": false
+          }
+        ]
+      },
+      {
+        "title": "Deep learning ",
+        "premium": false,
+        "lessons": [
+          {
+            "title": "Jfgt",
+            "content": "Ydjdu I can ",
+            "video": "",
+            "premium": false
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "title": "HTML and Web Development",
+    "premium": false,
+    "modules": []
+  },
+  {
+    "title": "HTML and Web Development",
+    "premium": false,
+    "modules": []
   }
 ]
