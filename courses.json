@@ -15,7 +15,7 @@
           },
           {
             "title": "What is HTML",
-            "content": "Hy rjdgid ridge road block of the world 🌎 I can get it now and see if they have to pay again I repeat in caps and you can I make ",
+            "content": "Hy rjdgid ridge road block of the world ð I can get it now and see if they have to pay again I repeat in caps and you can I make ",
             "video": "",
             "premium": false
           },
@@ -44,6 +44,18 @@
             "premium": false
           }
         ]
+      },
+      {
+        "title": "Python basics",
+        "premium": false,
+        "lessons": [
+          {
+            "title": "Intro",
+            "content": "What is outhin",
+            "video": "",
+            "premium": false
+          }
+        ]
       }
     ]
   },
@@ -55,6 +67,11 @@
   {
     "title": "HTML and Web Development",
     "premium": false,
+    "modules": []
+  },
+  {
+    "title": "Python Programing",
+    "premium": true,
     "modules": []
   }
 ]
