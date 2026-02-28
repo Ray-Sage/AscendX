@@ -1,1 +1,118 @@
 
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>AscendX Playground</title>
+<style>
+body {
+  margin:0;
+  font-family:Inter, sans-serif;
+  background:#f6f8fb;
+  color:#0b2340;
+}
+.wrap {
+  max-width:1200px;
+  margin:0 auto;
+  padding:16px;
+}
+h2 {
+  margin-bottom:12px;
+}
+textarea {
+  width:100%;
+  height:600px;
+  border-radius:10px;
+  border:1px solid #e6edf3;
+  padding:10px;
+  font-family:monospace;
+  font-size:15px;
+  resize:vertical;
+}
+iframe#code-output {
+  width:100%;
+  height:600px;
+  border:1px solid #0b2340;
+  margin-top:12px;
+  border-radius:10px;
+}
+.btn {
+  padding:8px 16px;
+  border-radius:10px;
+  border:0;
+  cursor:pointer;
+  margin-top:10px;
+  margin-right:6px;
+  font-size:14px;
+  font-weight:500;
+}
+.btn.primary {
+  background:#0b2340;
+  color:#fff;
+}
+.btn.secondary {
+  background:#fff;
+  border:1px solid #0b2340;
+  color:#0b2340;
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h2>AscendX Playground</h2>
+  <textarea id="code-input">&lt;!doctype html&gt;
+&lt;html&gt;
+&lt;head&gt;&lt;/head&gt;
+&lt;body&gt;
+&lt;h1&gt;Hello AscendX!&lt;/h1&gt;
+&lt;p&gt;Start coding here.&lt;/p&gt;
+&lt;/body&gt;
+&lt;/html&gt;</textarea>
+  <div>
+    <button class="btn primary" id="run-btn">Run</button>
+    <button class="btn secondary" id="copy-btn">Copy</button>
+    <button class="btn" id="reset-btn">Reset</button>
+  </div>
+  <iframe id="code-output" sandbox="allow-scripts allow-same-origin"></iframe>
+</div>
+
+<script>
+const codeInput = document.getElementById('code-input');
+const codeOutput = document.getElementById('code-output');
+
+function runCode(){
+  const doc = codeOutput.contentDocument || codeOutput.contentWindow.document;
+  doc.open();
+  doc.write(codeInput.value);
+  doc.close();
+}
+
+// Run button
+document.getElementById('run-btn').addEventListener('click', runCode);
+
+// Copy code button
+document.getElementById('copy-btn').addEventListener('click', ()=>{
+  navigator.clipboard.writeText(codeInput.value).then(()=>{
+    alert('Code copied to clipboard!');
+  });
+});
+
+// Reset button
+document.getElementById('reset-btn').addEventListener('click', ()=>{
+  codeInput.value = `<!doctype html>
+<html>
+<head></head>
+<body>
+<h1>Hello AscendX!</h1>
+<p>Start coding here.</p>
+</body>
+</html>`;
+  runCode();
+});
+
+// Auto-run on load
+window.addEventListener('load', runCode);
+</script>
+</body>
+</html>
