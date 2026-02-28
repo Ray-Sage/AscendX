@@ -56,6 +56,18 @@
             "premium": true
           }
         ]
+      },
+      {
+        "title": "Introduction",
+        "premium": true,
+        "lessons": [
+          {
+            "title": "What's ",
+            "content": "",
+            "video": "",
+            "premium": true
+          }
+        ]
       }
     ]
   },
