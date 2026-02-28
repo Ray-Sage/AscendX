@@ -4,7 +4,6 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>AscendX PRO</title>
 <style>
-/* ===== General Styles ===== */
 body{margin:0;font-family:'Segoe UI',sans-serif;background:linear-gradient(135deg,#6366f1,#0ea5e9);color:#111;overflow-x:hidden;}
 header{text-align:center;padding:20px;font-size:26px;font-weight:bold;color:white;}
 .container{padding:15px;opacity:1;}
@@ -14,30 +13,29 @@ button{padding:8px 12px;border:none;border-radius:8px;background:#6366f1;color:w
 button:hover{background:#4f46e5;box-shadow:0 4px 10px rgba(0,0,0,0.2);}
 input,textarea,select{width:100%;padding:8px;margin-top:6px;border-radius:8px;border:1px solid #ccc;}
 .hidden{display:none;}
-.fullscreen{position:fixed;top:0;left:0;width:100%;height:100%;background:white;overflow:auto;z-index:999;padding:15px;transition: transform 0.3s ease, opacity 0.3s;}
 .progressBar{height:8px;background:#ddd;border-radius:8px;overflow:hidden;margin-top:6px;}
 .progressFill{height:100%;width:0%;background:#0ea5e9;transition: width 0.5s ease;}
 .premiumTag{color:#e11d48;font-weight:bold;}
 .lessonContent iframe{width:100%;height:200px;border:none;margin-top:10px;border-radius:12px;}
 .quizOption{display:block;margin-top:6px;}
-.correct{color:green;font-weight:bold;animation:feedbackBounce 0.4s;}
-.wrong{color:red;font-weight:bold;animation:feedbackShake 0.4s;}
 #aboutCard{position:fixed;bottom:10px;right:10px;background:white;padding:15px;border-radius:16px;box-shadow:0 5px 15px rgba(0,0,0,0.2);max-width:90%;display:none;transition: transform 0.3s ease, opacity 0.3s ease;}
 #playground{margin-top:15px;}
 #playground textarea{height:100px;font-family:monospace;}
 #playground iframe{border:1px solid #ccc;margin-top:10px;width:100%;height:200px;border-radius:12px;}
-@keyframes feedbackBounce{0%{transform:translateY(-10px);opacity:0;}50%{transform:translateY(5px);opacity:1;}100%{transform:translateY(0);}}
-@keyframes feedbackShake{0%{transform:translateX(0);}25%{transform:translateX(-5px);}50%{transform:translateX(5px);}75%{transform:translateX(-5px);}100%{transform:translateX(0);}}
+.courseTitle{cursor:pointer;font-size:20px;color:#111;font-weight:bold;}
+.moduleTitle{cursor:pointer;margin-left:10px;font-size:18px;color:#333;}
+.lessonTitle{margin-left:20px;font-size:16px;color:#555;cursor:pointer;}
+.moduleContent,.lessonContentWrapper{display:none;}
 </style>
 </head>
 <body>
 <header>🚀 AscendX PRO</header>
-<div class="container"><!-- Login (disguised admin access) --><div class="card">
+<div class="container"><!-- Login --><div class="card">
 <h3>Enter Code</h3>
 <input type="password" id="adminPass" placeholder="Enter code">
 <button onclick="adminLogin()">Login</button>
 <p id="adminStatus"></p>
-</div><!-- Admin Panel (hidden until correct code) --><div id="adminPanel" class="hidden">
+</div><!-- Admin Panel --><div id="adminPanel" class="hidden">
 <div class="card">
 <h3>GitHub Token</h3>
 <input type="password" id="tokenInput" placeholder="Enter GitHub Token">
@@ -73,7 +71,6 @@ input,textarea,select{width:100%;padding:8px;margin-top:6px;border-radius:8px;bo
 <button onclick="runCode()">Run Code</button>
 <iframe id="codeOutput"></iframe>
 </div></div>
-<div id="courseView" class="fullscreen hidden"></div>
 <div id="aboutCard" class="card">
 <h3>About AscendX</h3>
 <p>Empowering global learners through cutting-edge education.</p>
@@ -121,12 +118,10 @@ function addCourse(){let title=courseTitle.value;if(!title)return alert("Enter t
  courses.push({title,premium:coursePremium.checked,modules:[]});
  courseTitle.value="";coursePremium.checked=false;
  saveLocalAndRender();updateSelects();}
-
 function addModule(){let cIndex=selectCourse.selectedIndex;if(cIndex<0)return alert("Select course first");
  let title=moduleTitle.value;if(!title)return alert("Enter module title");
  courses[cIndex].modules.push({title,premium:modulePremium.checked,lessons:[]});
  moduleTitle.value="";modulePremium.checked=false;saveLocalAndRender();updateSelects();}
-
 function addLesson(){let cIndex=selectCourse.selectedIndex,mIndex=selectModule.selectedIndex;
  if(cIndex<0||mIndex<0)return alert("Select course and module");
  let title=lessonTitle.value,content=lessonContent.value,video=lessonVideo.value;
@@ -135,18 +130,37 @@ function addLesson(){let cIndex=selectCourse.selectedIndex,mIndex=selectModule.s
 
 function saveLocalAndRender(){localStorage.setItem("courses",JSON.stringify(courses));renderCourses();}
 
+// Collapsible Course/Module/Lesson Rendering
 function renderCourses(){
  courseList.innerHTML="";
  courses.forEach((course,i)=>{
-  let card=document.createElement("div");card.className="card";
-  card.innerHTML=`<h3>${course.title} ${course.premium?'<span class="premiumTag">⭐ Premium</span>':''}</h3>`;
+  let courseDiv=document.createElement("div");courseDiv.className="card";
+  let courseTitleDiv=document.createElement("div");courseTitleDiv.className="courseTitle";
+  courseTitleDiv.innerHTML=`${course.title} ${course.premium?'<span class="premiumTag">⭐ Premium</span>':''}`;
+  courseDiv.appendChild(courseTitleDiv);
+  let moduleContainer=document.createElement("div");moduleContainer.className="moduleContent";
   course.modules.forEach((mod,j)=>{
-   card.innerHTML+=`<h4>Module: ${mod.title} ${mod.premium?'<span class="premiumTag">⭐</span>':''}</h4>`;
+   let modDiv=document.createElement("div");
+   let modTitleDiv=document.createElement("div");modTitleDiv.className="moduleTitle";
+   modTitleDiv.innerHTML=`${mod.title} ${mod.premium?'<span class="premiumTag">⭐</span>':''}`;
+   modDiv.appendChild(modTitleDiv);
+   let lessonContainer=document.createElement("div");lessonContainer.className="lessonContentWrapper";
    mod.lessons.forEach((les,k)=>{
-    card.innerHTML+=`<p><b>${les.title}</b>${les.premium?'<span class="premiumTag"> ⭐ Premium</span>':''}<br>${les.content}${les.video?`<div class="lessonContent"><iframe src="${les.video}" allowfullscreen></iframe></div>`:''}</p>`;
+    let lesDiv=document.createElement("div");lesDiv.className="lessonTitle";
+    lesDiv.innerHTML=`<b>${les.title}</b>${les.premium?'<span class="premiumTag"> ⭐ Premium</span>':''}`;
+    let contentDiv=document.createElement("div");contentDiv.className="lessonContent";
+    contentDiv.innerHTML=`<p>${les.content}</p>${les.video?`<iframe src="${les.video}" allowfullscreen></iframe>`:''}`;
+    lesDiv.appendChild(contentDiv);
+    lesDiv.onclick=()=>{contentDiv.style.display=contentDiv.style.display==='none'?'block':'none';};
+    lessonContainer.appendChild(lesDiv);
    });
+   modDiv.appendChild(lessonContainer);
+   modTitleDiv.onclick=()=>{lessonContainer.style.display=lessonContainer.style.display==='none'?'block':'none';};
+   moduleContainer.appendChild(modDiv);
   });
-  courseList.appendChild(card);
+  courseTitleDiv.onclick=()=>{moduleContainer.style.display=moduleContainer.style.display==='none'?'block':'none';};
+  courseDiv.appendChild(moduleContainer);
+  courseList.appendChild(courseDiv);
  });
 }
 
@@ -155,6 +169,7 @@ function updateSelects(){
  selectModule.innerHTML='';
  courses.forEach(c=>{let o=document.createElement('option');o.text=c.title;selectCourse.add(o);});
  let cIndex=selectCourse.selectedIndex;
+ selectModule.innerHTML='';
  if(cIndex>=0){courses[cIndex].modules.forEach(m=>{let o=document.createElement('option');o.text=m.title;selectModule.add(o);});}
 }
 selectCourse.onchange=updateSelects;
@@ -175,7 +190,6 @@ async function autoSaveGitHub(){
  }catch(e){alert('GitHub save failed');console.log(e);}
 }
 
-// Optional: Sync from GitHub
 async function syncFromGitHub(){await loadCourses();alert('Courses synced from GitHub');}
 
 // Playground
