@@ -37,11 +37,12 @@ input,textarea,select{width:100%;padding:8px;margin-top:6px;border-radius:8px;bo
 <input type="password" id="adminPass" placeholder="Enter password">
 <button onclick="adminLogin()">Login</button>
 <p id="adminStatus"></p>
-</div><!-- Admin Panel --><div id="adminPanel" class="hidden">
+</div><!-- Admin Panel (Hidden until login) --><div id="adminPanel" class="hidden">
 <div class="card">
 <h3>GitHub Token</h3>
 <input type="password" id="tokenInput" placeholder="GitHub Token">
 <button onclick="saveToken()">Save Token</button>
+<button onclick="autoSaveGitHub()">Save to GitHub</button>
 <button onclick="syncFromGitHub()">Sync</button>
 </div>
 <div class="card">
@@ -144,11 +145,26 @@ function updateSelects(){
 }
 selectCourse.onchange=updateSelects;
 
+// GitHub Save Function
+function autoSaveGitHub(){
+ if(!token) return alert('Add GitHub token first');
+ fetch(`https://api.github.com/repos/Ray-Sage/ascendx/contents/courses.json`,{
+  method:'PUT',
+  headers:{
+   Authorization:`token ${token}`,
+   'Content-Type':'application/json'
+  },
+  body:JSON.stringify({
+   message:'Update courses',
+   content:btoa(unescape(encodeURIComponent(JSON.stringify(courses,null,2))))
+  })
+ }).then(res=>res.json()).then(d=>{alert('Saved to GitHub')}).catch(e=>alert('GitHub save failed'));
+}
+
 // Playground
 function runCode(){
  let code=codeInput.value;
- let frame=codeOutput;
- frame.srcdoc=code;
+ codeOutput.srcdoc=code;
 }
 
 // About
