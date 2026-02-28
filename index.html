@@ -2,172 +2,160 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>AscendX Pro</title>
+<title>AscendX PRO</title>
 <style>
 /* ===== General Styles ===== */
-body {
-  margin: 0;
-  font-family: 'Segoe UI', sans-serif;
-  background: linear-gradient(135deg, #6366f1, #0ea5e9);
-  color: #111;
-  overflow-x: hidden;
-}
-header {
-  text-align: center;
-  padding: 20px;
-  font-size: 26px;
-  font-weight: bold;
-  color: white;
-}
-.container {
-  padding: 15px;
-  opacity: 1;
-}
-.card {
-  background: white;
-  padding: 15px;
-  border-radius: 16px;
-  margin-bottom: 15px;
-  box-shadow: 0 8px 20px rgba(0,0,0,0.15);
-  transition: transform 0.2s, box-shadow 0.2s;
-}
-.card:hover {
-  transform: scale(1.02);
-  box-shadow: 0 12px 25px rgba(0,0,0,0.25);
-}
-button {
-  padding: 8px 12px;
-  border: none;
-  border-radius: 8px;
-  background: #6366f1;
-  color: white;
-  font-weight: bold;
-  cursor: pointer;
-  margin-top: 6px;
-  transition: all 0.2s;
-}
-button:hover {
-  background: #4f46e5;
-  box-shadow: 0 4px 10px rgba(0,0,0,0.2);
-}
-input, textarea {
-  width: 100%;
-  padding: 8px;
-  margin-top: 6px;
-  border-radius: 8px;
-  border: 1px solid #ccc;
-}
-.hidden { display: none; }
-.fullscreen {
-  position: fixed;
-  top:0; left:0;
-  width:100%; height:100%;
-  background: white;
-  overflow:auto;
-  z-index:999;
-  padding:15px;
-  transition: transform 0.3s ease, opacity 0.3s;
-}
-.progressBar {
-  height:8px;
-  background:#ddd;
-  border-radius:8px;
-  overflow:hidden;
-  margin-top:6px;
-}
-.progressFill {
-  height:100%;
-  width:0%;
-  background:#0ea5e9;
-  transition: width 0.5s ease;
-}
-.premiumTag { color:#e11d48;font-weight:bold; }
-.lessonContent iframe {
-  width:100%;
-  height:200px;
-  border:none;
-  margin-top:10px;
-  border-radius:12px;
-}
-.quizOption { display:block;margin-top:6px; }
-.correct { color:green;font-weight:bold; animation:feedbackBounce 0.4s; }
-.wrong { color:red;font-weight:bold; animation:feedbackShake 0.4s; }
-#aboutCard {
-  position: fixed; bottom:10px; right:10px;
-  background:white;
-  padding:15px;
-  border-radius:16px;
-  box-shadow:0 5px 15px rgba(0,0,0,0.2);
-  max-width:90%;
-  display:none;
-  transition: transform 0.3s ease, opacity 0.3s ease;
-}
-@keyframes feedbackBounce { 0%{transform:translateY(-10px);opacity:0;}50%{transform:translateY(5px);opacity:1;}100%{transform:translateY(0);} }
-@keyframes feedbackShake { 0%{transform:translateX(0);}25%{transform:translateX(-5px);}50%{transform:translateX(5px);}75%{transform:translateX(-5px);}100%{transform:translateX(0);} }
+body{margin:0;font-family:'Segoe UI',sans-serif;background:linear-gradient(135deg,#6366f1,#0ea5e9);color:#111;overflow-x:hidden;}
+header{text-align:center;padding:20px;font-size:26px;font-weight:bold;color:white;}
+.container{padding:15px;opacity:1;}
+.card{background:white;padding:15px;border-radius:16px;margin-bottom:15px;box-shadow:0 8px 20px rgba(0,0,0,0.15);transition: transform 0.2s, box-shadow 0.2s;}
+.card:hover{transform:scale(1.02);box-shadow:0 12px 25px rgba(0,0,0,0.25);}
+button{padding:8px 12px;border:none;border-radius:8px;background:#6366f1;color:white;font-weight:bold;cursor:pointer;margin-top:6px;transition: all 0.2s;}
+button:hover{background:#4f46e5;box-shadow:0 4px 10px rgba(0,0,0,0.2);}
+input,textarea,select{width:100%;padding:8px;margin-top:6px;border-radius:8px;border:1px solid #ccc;}
+.hidden{display:none;}
+.fullscreen{position:fixed;top:0;left:0;width:100%;height:100%;background:white;overflow:auto;z-index:999;padding:15px;transition: transform 0.3s ease, opacity 0.3s;}
+.progressBar{height:8px;background:#ddd;border-radius:8px;overflow:hidden;margin-top:6px;}
+.progressFill{height:100%;width:0%;background:#0ea5e9;transition: width 0.5s ease;}
+.premiumTag{color:#e11d48;font-weight:bold;}
+.lessonContent iframe{width:100%;height:200px;border:none;margin-top:10px;border-radius:12px;}
+.quizOption{display:block;margin-top:6px;}
+.correct{color:green;font-weight:bold;animation:feedbackBounce 0.4s;}
+.wrong{color:red;font-weight:bold;animation:feedbackShake 0.4s;}
+#aboutCard{position:fixed;bottom:10px;right:10px;background:white;padding:15px;border-radius:16px;box-shadow:0 5px 15px rgba(0,0,0,0.2);max-width:90%;display:none;transition: transform 0.3s ease, opacity 0.3s ease;}
+#playground{margin-top:15px;}
+#playground textarea{height:100px;font-family:monospace;}
+#playground iframe{border:1px solid #ccc;margin-top:10px;width:100%;height:200px;border-radius:12px;}
+@keyframes feedbackBounce{0%{transform:translateY(-10px);opacity:0;}50%{transform:translateY(5px);opacity:1;}100%{transform:translateY(0);}}
+@keyframes feedbackShake{0%{transform:translateX(0);}25%{transform:translateX(-5px);}50%{transform:translateX(5px);}75%{transform:translateX(-5px);}100%{transform:translateX(0);}}
 </style>
 </head>
 <body>
 <header>🚀 AscendX PRO</header>
-<div class="container">  <!-- Admin Login Card -->  <div class="card">
-    <h3>Admin Login</h3>
-    <input type="password" id="adminPass" placeholder="Enter password">
-    <button onclick="adminLogin()">Login</button>
-    <p id="adminStatus"></p>
-  </div>  <!-- Admin Panel -->  <div id="adminPanel" class="hidden">
-    <div class="card">
-      <h3>GitHub Token</h3>
-      <input type="password" id="tokenInput" placeholder="GitHub Token">
-      <button onclick="saveToken()">Save Token</button>
-      <button onclick="syncFromGitHub()">Sync</button>
-    </div><div class="card">
-  <h3>Create Course</h3>
-  <input id="courseTitle" placeholder="Course Title">
-  <label><input type="checkbox" id="coursePremium"> Premium</label>
-  <button onclick="addCourse()">Create Course</button>
+<div class="container"><!-- Admin Login --><div class="card">
+<h3>Admin Login</h3>
+<input type="password" id="adminPass" placeholder="Enter password">
+<button onclick="adminLogin()">Login</button>
+<p id="adminStatus"></p>
+</div><!-- Admin Panel --><div id="adminPanel" class="hidden">
+<div class="card">
+<h3>GitHub Token</h3>
+<input type="password" id="tokenInput" placeholder="GitHub Token">
+<button onclick="saveToken()">Save Token</button>
+<button onclick="syncFromGitHub()">Sync</button>
 </div>
+<div class="card">
+<h3>Create Course</h3>
+<input id="courseTitle" placeholder="Course Title">
+<label><input type="checkbox" id="coursePremium"> Premium</label>
+<button onclick="addCourse()">Create Course</button>
+</div>
+<div class="card">
+<h3>Modules & Lessons</h3>
+<select id="selectCourse"></select>
+<input id="moduleTitle" placeholder="Module Title">
+<label><input type="checkbox" id="modulePremium"> Premium</label>
+<button onclick="addModule()">Add Module</button>
+<br>
+<select id="selectModule"></select>
+<input id="lessonTitle" placeholder="Lesson Title">
+<textarea id="lessonContent" placeholder="Lesson Content"></textarea>
+<input id="lessonVideo" placeholder="Video URL (optional)">
+<label><input type="checkbox" id="lessonPremium"> Premium</label>
+<button onclick="addLesson()">Add Lesson</button>
+</div>
+</div><!-- Course List --><div id="courseList"></div><button onclick="showAbout()">About AscendX</button> <button onclick="toggleMute()" id="muteBtn">Mute Sounds</button>
 
-  </div>  <!-- Course List -->  <div id="courseList"></div>  <!-- About Button --><button onclick="showAbout()">About AscendX</button>
-
-  <!-- Mute Sounds Toggle --><button onclick="toggleMute()" id="muteBtn">Mute Sounds</button>
-
-</div><!-- Course Fullscreen View --><div id="courseView" class="fullscreen hidden"></div><!-- About Card --><div id="aboutCard" class="card">
-  <h3>About AscendX</h3>
-  <p>Empowering global learners through cutting-edge education.</p>
-  <p>Developer: Ray Sage who's also known as Paul Zulu</p>
-  <button onclick="closeAbout()">Close</button>
+<!-- Code Playground --><div id="playground" class="card">
+<h3>Code Playground</h3>
+<textarea id="codeInput" placeholder="Write your HTML/JS/CSS here"></textarea>
+<button onclick="runCode()">Run Code</button>
+<iframe id="codeOutput"></iframe>
+</div></div>
+<div id="courseView" class="fullscreen hidden"></div>
+<div id="aboutCard" class="card">
+<h3>About AscendX</h3>
+<p>Empowering global learners through cutting-edge education.</p>
+<p>Developer: Ray Sage who's also known as Paul Zulu</p>
+<button onclick="closeAbout()">Close</button>
 </div><script>
-const owner="Ray-Sage";
-const repo="ascendx";
-const path="courses.json";
-let courses = JSON.parse(localStorage.getItem("courses")) || [];
-let token = localStorage.getItem("githubToken") || "";
-let completed = JSON.parse(localStorage.getItem("completed")) || {};
-let premiumUnlocked = localStorage.getItem("premium") || false;
-let admin = false;
-let studentName = localStorage.getItem("studentName") || "Student";
-let muted = false;
+let courses = JSON.parse(localStorage.getItem("courses"))||[];
+let token = localStorage.getItem("githubToken")||"";
+let admin=false;
+let muted=false;
 
-// Sounds
-const soundCorrect = new Audio("data:audio/wav;base64,UklGRiQAAABXQVZFZm10IBAAAAABAAEAIlYAAESsAAACABAAZGF0YQAAAAA=");
-const soundWrong = new Audio("data:audio/wav;base64,UklGRiQAAABXQVZFZm10IBAAAAABAAEAIlYAAESsAAACABAAZGF0YQAAAAA=");
-const soundDing = new Audio("data:audio/wav;base64,UklGRiQAAABXQVZFZm10IBAAAAABAAEAIlYAAESsAAACABAAZGF0YQAAAAA=");
-function playSound(audio){ if(!muted) audio.play(); }
+function adminLogin(){
+ if(adminPass.value==="Ray@AscendX"){
+  admin=true;
+  adminPanel.classList.remove("hidden");
+  adminStatus.innerText="✅ Admin Logged In";
+  updateSelects();
+ } else alert("Wrong password");
+}
+function saveToken(){token=tokenInput.value.trim();localStorage.setItem("githubToken",token);alert("Token saved");}
+function toggleMute(){muted=!muted;muteBtn.innerText=muted?'Unmute Sounds':'Mute Sounds';}
 
-/* ===== About Card ===== */
-function showAbout(){ let card=document.getElementById('aboutCard'); card.style.display='block'; card.style.opacity=0; setTimeout(()=>{card.style.opacity=1;},10); }
-function closeAbout(){ let card=document.getElementById('aboutCard'); card.style.opacity=0; setTimeout(()=>{card.style.display='none';},300); }
+// Course Management
+function addCourse(){
+ let title=courseTitle.value;if(!title)return alert("Enter title");
+ courses.push({title,premium:coursePremium.checked,modules:[]});
+ localStorage.setItem("courses",JSON.stringify(courses));
+ courseTitle.value="";coursePremium.checked=false;
+ renderCourses();updateSelects();
+}
+function addModule(){
+ let cIndex=selectCourse.selectedIndex;if(cIndex<0)return alert("Select course first");
+ let title=moduleTitle.value;if(!title)return alert("Enter module title");
+ courses[cIndex].modules.push({title,premium:modulePremium.checked,lessons:[]});
+ moduleTitle.value="";modulePremium.checked=false;
+ localStorage.setItem("courses",JSON.stringify(courses));
+ updateSelects();renderCourses();
+}
+function addLesson(){
+ let cIndex=selectCourse.selectedIndex,mIndex=selectModule.selectedIndex;
+ if(cIndex<0||mIndex<0)return alert("Select course and module");
+ let title=lessonTitle.value,content=lessonContent.value,video=lessonVideo.value;
+ courses[cIndex].modules[mIndex].lessons.push({title,content,video,premium:lessonPremium.checked});
+ lessonTitle.value="";lessonContent.value="";lessonVideo.value="";lessonPremium.checked=false;
+ localStorage.setItem("courses",JSON.stringify(courses));
+ renderCourses();
+}
+function renderCourses(){
+ courseList.innerHTML="";
+ courses.forEach((course,i)=>{
+  let card=document.createElement("div");card.className="card";
+  if(course.premium)card.innerHTML+='<div class="premiumTag">⭐ Premium Course</div>';
+  card.innerHTML+=`<h3>${course.title}</h3>`;
+  course.modules.forEach((mod,j)=>{
+   card.innerHTML+=`<h4>Module: ${mod.title} ${mod.premium?'<span class="premiumTag">⭐</span>':''}</h4>`;
+   mod.lessons.forEach((les,k)=>{
+    card.innerHTML+=`<p>Lesson: ${les.title} ${les.premium?'<span class="premiumTag">⭐</span>':''}</p>`;
+   });
+  });
+  courseList.appendChild(card);
+ });
+}
+function updateSelects(){
+ selectCourse.innerHTML='';
+ selectModule.innerHTML='';
+ courses.forEach(c=>{let o=document.createElement('option');o.text=c.title;selectCourse.add(o);});
+ let cIndex=selectCourse.selectedIndex;
+ if(cIndex>=0){courses[cIndex].modules.forEach(m=>{let o=document.createElement('option');o.text=m.title;selectModule.add(o);});}
+}
+selectCourse.onchange=updateSelects;
 
-/* ===== Mute Toggle ===== */
-function toggleMute(){ muted = !muted; document.getElementById('muteBtn').innerText = muted ? 'Unmute Sounds' : 'Mute Sounds'; }
+// Playground
+function runCode(){
+ let code=codeInput.value;
+ let frame=codeOutput;
+ frame.srcdoc=code;
+}
 
-/* ===== Admin Functions ===== */
-function adminLogin(){ if(adminPass.value === "Ray@AscendX"){ admin=true; adminPanel.classList.remove("hidden"); adminStatus.innerText="✅ Admin Logged In"; tokenInput.value = token; } else alert("Wrong password"); }
-function saveToken(){ token = tokenInput.value.trim(); localStorage.setItem("githubToken",token); alert("Token saved"); }
+// About
+function showAbout(){aboutCard.style.display='block';aboutCard.style.opacity=0;setTimeout(()=>{aboutCard.style.opacity=1;},10);}
+function closeAbout(){aboutCard.style.opacity=0;setTimeout(()=>{aboutCard.style.display='none';},300);}
 
-/* ===== Courses & Modules ===== */
-function addCourse(){ let title = courseTitle.value; if(!title) return alert("Enter title"); courses.push({title, premium:coursePremium.checked, modules:[]}); localStorage.setItem("courses",JSON.stringify(courses)); autoSaveGitHub(); renderCourses(); courseTitle.value=""; coursePremium.checked=false; }
-function renderCourses(){ courseList.innerHTML=""; courses.forEach((course,i)=>{ let card=document.createElement("div"); card.className="card"; if(course.premium) card.innerHTML+="<div class='premiumTag'>⭐ Premium Course</div>"; card.innerHTML+=`<h3>${course.title}</h3><button onclick="openCourse(${i})">Open Course</button>`; courseList.appendChild(card); }); }
-
-/* ===== Rest of course/lesson/admin functionality remains unchanged (from previous code) ===== */
+renderCourses();
+updateSelects();
 </script></body>
 </html>
