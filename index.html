@@ -5,44 +5,40 @@
 <meta name="viewport" content="width=device-width,initial-scale=1" />
 <title>AscendX Academy</title>
 <style>
-  :root{
-    --navy:#0b2340; --teal:#2aa6a1; --gold:#cfa939; --muted:#6b7785;
-    --bg:#f6f8fb; --card:#fff; --radius:12px; --maxw:1100px;
-  }
-  *{box-sizing:border-box}
-  body{margin:0;font-family:Inter, system-ui, Arial, sans-serif;background:var(--bg);color:var(--navy);-webkit-font-smoothing:antialiased;}
-  .wrap{max-width:var(--maxw);margin:0 auto;padding:12px;}
-  header{display:flex;align-items:center;gap:12px;background:#fff;padding:10px;border-bottom:1px solid #e6eef3;position:sticky;top:0;z-index:20}
-  .logo{width:44px;height:44px;border-radius:8px;background:linear-gradient(135deg,var(--navy),#123a57);display:flex;align-items:center;justify-content:center;color:#fff;font-weight:800}
-  .title{font-weight:700}
-  .subtitle{font-size:13px;color:var(--muted)}
-  .card{background:var(--card);border-radius:12px;padding:14px;margin-top:12px;border:1px solid rgba(11,35,64,0.04)}
-  main{display:grid;grid-template-columns:1fr 360px;gap:16px;margin-top:16px}
-  @media(max-width:900px){main{grid-template-columns:1fr}}
-  .modules{display:grid;gap:10px}
-  .module{padding:12px;border-radius:10px;border:1px solid #e6eef3;background:#fff}
-  .module h3{margin:0 0 6px 0}
-  .lesson-list{margin-top:8px;display:none}
-  .lesson{padding:8px;border-radius:8px;background:#f7fbfb;margin-top:6px;display:flex;justify-content:space-between;align-items:center}
-  .btn{padding:8px 10px;border-radius:8px;border:0;cursor:pointer}
-  .btn.primary{background:var(--navy);color:#fff}
-  .btn.secondary{background:#fff;border:1px solid var(--navy);color:var(--navy)}
-  .muted{color:var(--muted)}
-  .video-wrap{position:relative;padding-top:56%;border-radius:8px;overflow:hidden;margin-top:8px}
-  .video-wrap iframe{position:absolute;left:0;top:0;width:100%;height:100%;border:0}
-  textarea{width:100%;height:150px;border-radius:8px;border:1px solid #e6edf3;padding:8px;font-family:monospace}
-  .preview{height:300px;border-radius:8px;border:1px solid #e6edf3;overflow:hidden;margin-top:8px}
-  /* Admin floating button & modal */
-  .admin-fab{position:fixed;right:16px;bottom:16px;background:var(--navy);color:#fff;border-radius:999px;padding:12px 14px;box-shadow:0 8px 30px rgba(11,35,64,0.18);z-index:60;border:0}
-  .modal-backdrop{position:fixed;inset:0;background:rgba(2,8,23,0.45);display:flex;align-items:center;justify-content:center;z-index:70}
-  .modal{width:94%;max-width:420px;background:#fff;padding:18px;border-radius:12px}
-  .small{font-size:13px;color:var(--muted)}
-  .hidden{display:none}
-  .form-row{margin-top:8px}
-  input[type="text"], input[type="password"], textarea{width:100%;padding:8px;border:1px solid #e6edf3;border-radius:8px}
-  .flex{display:flex;gap:8px}
-  .admin-note{font-size:13px;color:#a1aab3;margin-top:8px}
-  .status-bar{font-size:12px;color:var(--teal);margin-top:8px;text-align:right}
+:root{
+  --navy:#0b2340; --teal:#2aa6a1; --gold:#cfa939; --muted:#6b7785;
+  --bg:#f6f8fb; --card:#fff; --radius:12px; --maxw:1100px;
+}
+*{box-sizing:border-box}
+body{margin:0;font-family:Inter, system-ui, Arial, sans-serif;background:var(--bg);color:var(--navy);-webkit-font-smoothing:antialiased;}
+.wrap{max-width:var(--maxw);margin:0 auto;padding:12px;}
+header{display:flex;align-items:center;gap:12px;background:#fff;padding:10px;border-bottom:1px solid #e6eef3;position:sticky;top:0;z-index:20}
+.logo{width:44px;height:44px;border-radius:8px;background:linear-gradient(135deg,var(--navy),#123a57);display:flex;align-items:center;justify-content:center;color:#fff;font-weight:800}
+.title{font-weight:700}
+.subtitle{font-size:13px;color:var(--muted)}
+.card{background:var(--card);border-radius:12px;padding:14px;margin-top:12px;border:1px solid rgba(11,35,64,0.04)}
+main{display:grid;grid-template-columns:1fr 360px;gap:16px;margin-top:16px}
+@media(max-width:900px){main{grid-template-columns:1fr}}
+.modules{display:grid;gap:10px}
+.module{padding:12px;border-radius:10px;border:1px solid #e6eef3;background:#fff;position:relative}
+.module h3{margin:0 0 6px 0}
+.lesson-list{margin-top:8px;display:none}
+.lesson{padding:8px;border-radius:8px;background:#f7fbfb;margin-top:6px;position:relative}
+.lesson-content{margin-top:6px;padding:8px;background:#eef6f7;border-radius:6px;}
+.btn{padding:6px 10px;border-radius:8px;border:0;cursor:pointer;font-size:13px}
+.btn.primary{background:var(--navy);color:#fff}
+.btn.secondary{background:#fff;border:1px solid var(--navy);color:var(--navy)}
+.muted{color:var(--muted)}
+.video-wrap{position:relative;padding-top:56%;border-radius:8px;overflow:hidden}
+.video-wrap iframe{position:absolute;left:0;top:0;width:100%;height:100%;border:0}
+.progress-bar{position:absolute;bottom:4px;left:0;height:4px;background:var(--teal);border-radius:2px;width:0%;transition:width 0.3s;}
+.module-progress{height:6px;background:#e0e6eb;border-radius:3px;margin-top:6px;overflow:hidden}
+.module-progress-fill{height:100%;background:var(--teal);width:0%;transition:width 0.3s;}
+.course-progress{height:8px;background:#dfe6f3;border-radius:4px;overflow:hidden;margin-bottom:6px}
+.course-progress-fill{height:100%;background:var(--teal);width:0%;transition:width 0.3s;}
+.playground-fab{position:fixed;right:16px;bottom:16px;background:var(--teal);color:#fff;border-radius:999px;padding:12px 14px;box-shadow:0 8px 30px rgba(11,35,64,0.18);z-index:60;border:0;font-weight:700}
+.overall-progress{font-size:13px;color:var(--muted);margin-top:6px}
+.highlight{background:#e0f7f7}
 </style>
 </head>
 <body>
@@ -51,165 +47,162 @@
   <div class="logo">AX</div>
   <div>
     <div class="title">AscendX Academy</div>
-    <div class="subtitle">HTML Foundations — Professional • Academic • Tech</div>
+    <div class="subtitle">Professional • Academic • Tech</div>
   </div>
 </header>
 
-<!-- Status -->
-<div id="status-bar" class="status-bar">Loading…</div>
-
-<!-- Student-visible area -->
 <div id="student-area">
+  <div class="card">
+    <div style="font-weight:700">Courses & Modules</div>
+    <div class="small muted">Click "Show/Hide Lessons" to expand modules. Click "Play" to view lesson content. Progress is saved automatically.</div>
+    <div class="overall-progress" id="overall-progress">Overall Progress: 0%</div>
+  </div>
+
   <main>
     <section>
       <div class="card">
-        <h2>Courses & Modules</h2>
-        <div id="courses-list" class="modules">Loading courses…</div>
+        <h2>All Courses</h2>
+        <div id="modules-list" class="modules">Loading courses…</div>
       </div>
     </section>
 
     <aside class="rightcol">
       <div class="card">
         <div style="font-weight:700">Now Playing: <span id="current-lesson-title">—</span></div>
-        <div class="video-wrap">
+        <div class="video-wrap" style="margin-top:10px">
           <iframe id="lesson-video" src="" title="Lesson video" allowfullscreen></iframe>
         </div>
-      </div>
-
-      <div class="card" style="margin-top:12px">
-        <div style="font-weight:700">Code Playground</div>
-        <textarea id="code-input">&lt;!doctype html&gt;
-&lt;html&gt;&lt;body&gt;
-&lt;h1&gt;Hello AscendX&lt;/h1&gt;
-&lt;p&gt;Edit & press Run.&lt;/p&gt;
-&lt;/body&gt;&lt;/html&gt;</textarea>
-        <div style="margin-top:8px;display:flex;gap:8px;flex-wrap:wrap">
-          <button id="run-btn" class="btn primary">Run</button>
-          <button id="copy-btn" class="btn secondary">Copy</button>
-          <button id="reset-code-btn" class="btn">Reset</button>
-        </div>
-        <div class="preview"><iframe id="code-output" sandbox="allow-scripts"></iframe></div>
       </div>
     </aside>
   </main>
 </div>
 </div>
 
+<!-- Playground FAB -->
+<button onclick="location.href='playground.html'" class="playground-fab" title="Code Playground">Playground</button>
+
 <script>
-const USERNAME = 'Ray-Sage';
-const REPO = 'AscendX';
-const FILE_PATH = 'courses.json';
-let DATA = { courses: [] };
-const LOCAL_KEY = 'axx_local_v2';
+const USERNAME='Ray-Sage';
+const REPO='AscendX';
+const FILE_PATH='courses.json';
+let COURSES=[];
+const progressKey='ascendx-progress';
+let progress=JSON.parse(localStorage.getItem(progressKey)||'{}');
 
-/* Status helper */
-function setStatus(msg, ok=true){ const s=document.getElementById('status-bar'); s.textContent=msg; s.style.color=ok?'var(--teal)':'var(--gold)'; }
-
-/* Escape helper */
-function escapeHtml(s){ return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
-
-/* Fetch courses.json from GitHub */
 async function fetchCourses(){
-  setStatus("Fetching courses from GitHub…");
   try{
-    const url = `https://raw.githubusercontent.com/${USERNAME}/${REPO}/main/${FILE_PATH}?t=${Date.now()}`;
-    const r = await fetch(url,{cache:"no-store"});
-    if(!r.ok) throw new Error('GitHub fetch failed: '+r.status);
-    const j = await r.json();
-    if(Array.isArray(j)) DATA = { courses: j };
-    else if(j.courses) DATA = j;
-    else DATA = { courses: [] };
-    localStorage.setItem(LOCAL_KEY, JSON.stringify({data:DATA, ts:Date.now()}));
-    setStatus("Courses loaded");
-    renderAll();
-  }catch(err){
-    console.warn(err);
-    setStatus("Failed to load GitHub — using cache/fallback", false);
-    const cached = localStorage.getItem(LOCAL_KEY);
-    if(cached){ try{ DATA = JSON.parse(cached).data; }catch(e){ DATA={courses:[]}; } }
-    renderAll();
+    const url=`https://raw.githubusercontent.com/${USERNAME}/${REPO}/main/${FILE_PATH}`;
+    const res=await fetch(url,{cache:'no-store'});
+    if(!res.ok) throw new Error('GitHub fetch failed: '+res.status);
+    COURSES=await res.json();
+  }catch(e){
+    console.warn('Unable to load from GitHub',e);
+    COURSES=[];
   }
+  renderCourses();
+  updateOverallProgress();
 }
 
-/* Render all courses/modules/lessons */
-function renderAll(){
-  const list = document.getElementById('courses-list');
+function renderCourses(){
+  const list=document.getElementById('modules-list');
   list.innerHTML='';
-  DATA.courses.forEach((course, cIdx)=>{
-    const courseDiv = document.createElement('div');
-    courseDiv.className='module';
-    const premiumTag = course.premium?'<span class="small" style="color:var(--gold);font-weight:700">PREMIUM</span>':'<span class="small" style="color:var(--teal);font-weight:700">FREE</span>';
-    courseDiv.innerHTML=`<h3>${escapeHtml(course.title)} ${premiumTag}</h3>`;
-    const moduleContainer = document.createElement('div');
-    (course.modules||[]).forEach((mod, mIdx)=>{
-      const mDiv = document.createElement('div');
-      mDiv.className='module';
-      const modPremium = mod.premium?'<span class="small" style="color:var(--gold);font-weight:700">PREMIUM</span>':'<span class="small" style="color:var(--teal);font-weight:700">FREE</span>';
-      mDiv.innerHTML=`<h4>${escapeHtml(mod.title)} ${modPremium}</h4><div class="lesson-list" id="lessons-${cIdx}-${mIdx}"></div>`;
-      moduleContainer.appendChild(mDiv);
-      renderLessons(mod.lessons,cIdx,mIdx);
-      const toggleBtn = document.createElement('button');
-      toggleBtn.className='btn secondary';
-      toggleBtn.textContent='Show/Hide Lessons';
-      toggleBtn.onclick=()=>{ 
-        const l = document.getElementById(`lessons-${cIdx}-${mIdx}`);
-        l.style.display = l.style.display==='block'?'none':'block';
-      };
-      mDiv.appendChild(toggleBtn);
+  COURSES.forEach((course,cidx)=>{
+    const cCard=document.createElement('div');
+    cCard.className='module';
+    const completedLessons=course.modules.reduce((sum,m)=>
+      sum + (m.lessons||[]).filter((_,lidx)=>progress[`${cidx}-${course.modules.indexOf(m)}-${lidx}`]).length
+    ,0);
+    const totalLessons=course.modules.reduce((sum,m)=>sum+(m.lessons||[]).length,0);
+    const coursePercent=totalLessons?Math.round((completedLessons/totalLessons)*100):0;
+
+    cCard.innerHTML=`<h3>${course.title} ${course.premium?'<span style="color:var(--gold);font-weight:700">PREMIUM</span>':'<span style="color:var(--teal);font-weight:700">FREE</span>'}</h3>
+      <div class="course-progress"><div class="course-progress-fill" style="width:${coursePercent}%"></div></div>
+      <div class="muted">${course.modules.length} module(s)</div>
+      <div style="margin-top:8px">
+        <button class="btn primary" data-action="toggle" data-cidx="${cidx}">Show/Hide Lessons</button>
+      </div>
+      <div class="lesson-list" id="course-${cidx}"></div>`;
+    list.appendChild(cCard);
+
+    const lessonList=document.getElementById(`course-${cidx}`);
+    course.modules.forEach((mod,midx)=>{
+      const modDiv=document.createElement('div');
+      modDiv.innerHTML=`<div style="font-weight:700;margin-top:6px">${mod.title}</div>
+      <div class="module-progress"><div class="module-progress-fill" style="width:${Math.round(((mod.lessons||[]).filter((_,lidx)=>progress[`${cidx}-${midx}-${lidx}`]).length/(mod.lessons||[]).length)*100)}%"></div></div>`;
+      const modLessons=document.createElement('div'); modLessons.style.marginLeft='12px';
+      (mod.lessons||[]).forEach((les,lidx)=>{
+        const lesDiv=document.createElement('div'); lesDiv.className='lesson';
+        const lessonPercent=progress[`${cidx}-${midx}-${lidx}`]||0;
+        lesDiv.innerHTML=`<div style="display:flex;justify-content:space-between;align-items:center">
+          <div><strong>${les.title}</strong></div>
+          <div>
+            <button class="btn secondary" data-action="play" data-cidx="${cidx}" data-midx="${midx}" data-lidx="${lidx}">Play</button>
+          </div>
+        </div>
+        <div class="progress-bar" style="width:${lessonPercent}%;"></div>`;
+        modLessons.appendChild(lesDiv);
+      });
+      modDiv.appendChild(modLessons);
+      lessonList.appendChild(modDiv);
     });
-    courseDiv.appendChild(moduleContainer);
-    list.appendChild(courseDiv);
   });
-  wirePlayButtons();
+  wireHandlers();
 }
 
-/* Render lessons */
-function renderLessons(lessons,cIdx,mIdx){
-  const container = document.getElementById(`lessons-${cIdx}-${mIdx}`);
-  container.innerHTML='';
-  if(!lessons || lessons.length===0){ container.innerHTML='<div class="small muted">No lessons yet</div>'; return; }
-  lessons.forEach((les,lIdx)=>{
-    const lv = document.createElement('div');
-    lv.className='lesson';
-    const safeText = les.text || les.content || '';
-    const playBtn = les.video?`<button class="btn secondary playBtn" data-course="${cIdx}" data-module="${mIdx}" data-lesson="${lIdx}">Play</button>`:'';
-    lv.innerHTML=`<div><strong>${escapeHtml(les.title)}</strong><div class="small muted">${escapeHtml(safeText)}</div></div>${playBtn}`;
-    container.appendChild(lv);
+function wireHandlers(){
+  document.querySelectorAll('.module button').forEach(btn=>{
+    btn.addEventListener('click', e=>{
+      const action=btn.getAttribute('data-action');
+      if(action==='toggle'){
+        const cidx=btn.getAttribute('data-cidx');
+        const el=document.getElementById(`course-${cidx}`);
+        el.style.display=(el.style.display==='block')?'none':'block';
+      } else if(action==='play'){
+        const cidx=+btn.getAttribute('data-cidx'), midx=+btn.getAttribute('data-midx'), lidx=+btn.getAttribute('data-lidx');
+        const lesson=COURSES[cidx].modules[midx].lessons[lidx];
+        if(lesson){
+          document.getElementById('current-lesson-title').textContent=lesson.title;
+          document.getElementById('lesson-video').src=lesson.video||'';
+
+          const lessonDiv=btn.closest('.lesson');
+          let existingContent=lessonDiv.querySelector('.lesson-content');
+          if(existingContent) existingContent.remove();
+          const contentDiv=document.createElement('div');
+          contentDiv.className='lesson-content';
+          contentDiv.textContent=lesson.content||'No content available';
+          lessonDiv.appendChild(contentDiv);
+
+          // mark progress
+          progress[`${cidx}-${midx}-${lidx}`]=100;
+          localStorage.setItem(progressKey,JSON.stringify(progress));
+          lessonDiv.querySelector('.progress-bar').style.width='100%';
+          updateOverallProgress();
+
+          // auto highlight next lesson
+          const nextLesson=lessonDiv.nextElementSibling;
+          if(nextLesson) nextLesson.classList.add('highlight');
+          lessonDiv.scrollIntoView({behavior:'smooth',block:'center'});
+        }
+      }
+    });
   });
 }
 
-/* Wire lesson play buttons */
-function wirePlayButtons(){
-  document.querySelectorAll('.playBtn').forEach(btn=>{
-    btn.onclick=()=>{
-      const c = btn.dataset.course, m=btn.dataset.module, l=btn.dataset.lesson;
-      const les = DATA.courses[c].modules[m].lessons[l];
-      document.getElementById('current-lesson-title').textContent=les.title;
-      document.getElementById('lesson-video').src=les.video||'';
-    };
+function updateOverallProgress(){
+  let done=0,total=0;
+  COURSES.forEach((course,cidx)=>{
+    course.modules.forEach((mod,midx)=>{
+      (mod.lessons||[]).forEach((_,lidx)=>{
+        total++;
+        if(progress[`${cidx}-${midx}-${lidx}`]) done++;
+      });
+    });
   });
+  const percent=total?Math.round((done/total)*100):0;
+  document.getElementById('overall-progress').textContent=`Overall Progress: ${percent}%`;
 }
 
-/* Playground */
-function wirePlayground(){
-  const input = document.getElementById('code-input');
-  const output = document.getElementById('code-output');
-  document.getElementById('run-btn').onclick=()=>{
-    const doc = output.contentDocument||output.contentWindow.document;
-    doc.open(); doc.write(input.value); doc.close();
-  };
-  document.getElementById('copy-btn').onclick=()=>navigator.clipboard.writeText(input.value).then(()=>alert('Code copied!'));
-  document.getElementById('reset-code-btn').onclick=()=>{
-    input.value='<!doctype html>\n<html>\n<body>\n<h1>Hello AscendX</h1>\n<p>Edit & press Run.</p>\n</body>\n</html>';
-    document.getElementById('run-btn').click();
-  };
-}
-
-/* Start */
-window.addEventListener('load',()=>{
-  fetchCourses();
-  wirePlayground();
-});
+window.addEventListener('load',fetchCourses);
 </script>
 </body>
 </html>
