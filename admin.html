@@ -1,0 +1,134 @@
+/*
+  File 2: admin.html - For admin only
+*/
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AscendX PRO - Admin</title>
+<style>
+body{margin:0;font-family:'Segoe UI',sans-serif;background:linear-gradient(135deg,#6366f1,#0ea5e9);color:#111;overflow-x:hidden;}
+header{text-align:center;padding:20px;font-size:26px;font-weight:bold;color:white;}
+.container{padding:15px;opacity:1;}
+.card{background:white;padding:15px;border-radius:16px;margin-bottom:15px;box-shadow:0 8px 20px rgba(0,0,0,0.15);transition: transform 0.2s, box-shadow 0.2s;}
+.card:hover{transform:scale(1.02);box-shadow:0 12px 25px rgba(0,0,0,0.25);}
+button{padding:8px 12px;border:none;border-radius:8px;background:#6366f1;color:white;font-weight:bold;cursor:pointer;margin-top:6px;transition: all 0.2s;}
+button:hover{background:#4f46e5;box-shadow:0 4px 10px rgba(0,0,0,0.2);}
+input,textarea,select{width:100%;padding:8px;margin-top:6px;border-radius:8px;border:1px solid #ccc;}
+.hidden{display:none;}
+.premiumTag{color:#e11d48;font-weight:bold;}
+.courseTitle{font-size:20px;font-weight:bold;}
+.moduleTitle{margin-left:10px;font-size:18px;color:#333;}
+.lessonTitle{margin-left:20px;font-size:16px;color:#555;}
+.moduleContent,.lessonContentWrapper{display:none;}
+</style>
+</head>
+<body>
+<header>🚀 AscendX PRO - Admin</header>
+<div class="container">
+<div class="card">
+<h3>Enter Admin Password</h3>
+<input type="password" id="adminPass" placeholder="Enter code">
+<button onclick="adminLogin()">Login</button>
+<p id="adminStatus"></p>
+</div>
+<div id="adminPanel" class="hidden">
+<div class="card">
+<h3>GitHub Token</h3>
+<input type="password" id="tokenInput" placeholder="Enter GitHub Token">
+<button onclick="saveToken()">Save Token</button>
+<button onclick="autoSaveGitHub()">Save to GitHub</button>
+<button onclick="syncFromGitHub()">Sync from GitHub</button>
+</div>
+<div class="card">
+<h3>Create Course</h3>
+<input id="courseTitle" placeholder="Course Title">
+<label><input type="checkbox" id="coursePremium"> Premium</label>
+<button onclick="addCourse()">Create Course</button>
+</div>
+<div class="card">
+<h3>Modules & Lessons</h3>
+<select id="selectCourse"></select>
+<input id="moduleTitle" placeholder="Module Title">
+<label><input type="checkbox" id="modulePremium"> Premium</label>
+<button onclick="addModule()">Add Module</button>
+<br>
+<select id="selectModule"></select>
+<input id="lessonTitle" placeholder="Lesson Title">
+<textarea id="lessonContent" placeholder="Lesson Content"></textarea>
+<input id="lessonVideo" placeholder="Video URL (optional)">
+<label><input type="checkbox" id="lessonPremium"> Premium</label>
+<button onclick="addLesson()">Add Lesson</button>
+</div>
+</div>
+</div>
+<script>
+let courses=[];
+let token=localStorage.getItem("githubToken")||"";
+let admin=false;
+const repoOwner="Ray-Sage";
+const repoName="ascendx";
+
+function adminLogin(){
+ if(adminPass.value==="Ray@AscendX"){
+  admin=true;
+  adminPanel.classList.remove("hidden");
+  adminStatus.innerText="✅ Access Granted";
+  loadCourses();
+  updateSelects();
+ } else alert("Wrong code");
+}
+
+function saveToken(){token=tokenInput.value.trim();localStorage.setItem("githubToken",token);alert("Token saved locally");}
+
+// GitHub operations
+async function loadCourses(){
+ try{
+  const res=await fetch(`https://api.github.com/repos/${repoOwner}/${repoName}/contents/courses.json`);
+  const data=await res.json();
+  if(data.content){
+   let decoded=atob(data.content);
+   courses=JSON.parse(decoded);
+   updateSelects();
+   localStorage.setItem("courses",JSON.stringify(courses));
+  }
+ }catch(e){console.log('GitHub fetch failed, using localStorage'); courses=JSON.parse(localStorage.getItem("courses"))||[];}
+}
+
+function autoSaveGitHub(){
+ if(!token) return alert('Enter your GitHub token first');
+ fetch(`https://api.github.com/repos/${repoOwner}/${repoName}/contents/courses.json`).then(res=>res.json()).then(data=>{
+  fetch(`https://api.github.com/repos/${repoOwner}/${repoName}/contents/courses.json`,{
+   method:'PUT',
+   headers:{Authorization:`token ${token}`,'Content-Type':'application/json'},
+   body:JSON.stringify({message:'Update courses',content:btoa(unescape(encodeURIComponent(JSON.stringify(courses,null,2)))),sha:data.sha})
+  }).then(()=>alert('Saved to GitHub')).catch(e=>alert('GitHub save failed'));
+ });
+}
+
+function syncFromGitHub(){loadCourses().then(()=>alert('Courses synced from GitHub'))}
+
+// Add/Edit/Delete
+function addCourse(){let title=courseTitle.value;if(!title)return alert('Enter title');
+ courses.push({title,premium:coursePremium.checked,modules:[]});courseTitle.value='';coursePremium.checked=false;saveLocal();updateSelects();}
+function addModule(){let cIndex=selectCourse.selectedIndex;if(cIndex<0)return alert('Select course');
+ let title=moduleTitle.value;if(!title)return alert('Enter module');
+ courses[cIndex].modules.push({title,premium:modulePremium.checked,lessons:[]});moduleTitle.value='';modulePremium.checked=false;saveLocal();updateSelects();}
+function addLesson(){let cIndex=selectCourse.selectedIndex,mIndex=selectModule.selectedIndex;
+ if(cIndex<0||mIndex<0)return alert('Select course/module');
+ let title=lessonTitle.value,content=lessonContent.value,video=lessonVideo.value;
+ courses[cIndex].modules[mIndex].lessons.push({title,content,video,premium:lessonPremium.checked});
+ lessonTitle.value='';lessonContent.value='';lessonVideo.value='';lessonPremium.checked=false;saveLocal();}
+
+function saveLocal(){localStorage.setItem('courses',JSON.stringify(courses));}
+
+function updateSelects(){
+ selectCourse.innerHTML='';selectModule.innerHTML='';
+ courses.forEach(c=>{let o=document.createElement('option');o.text=c.title;selectCourse.add(o);});
+ let cIndex=selectCourse.selectedIndex;if(cIndex>=0){courses[cIndex].modules.forEach(m=>{let o=document.createElement('option');o.text=m.title;selectModule.add(o);});}
+}
+selectCourse.onchange=updateSelects;
+</script>
+</body>
+</html>
