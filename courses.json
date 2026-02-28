@@ -15,7 +15,7 @@
           },
           {
             "title": "What is HTML",
-            "content": "Hy rjdgid ridge road block of the world ð I can get it now and see if they have to pay again I repeat in caps and you can I make ",
+            "content": "Hy rjdgid ridge road block of the world Ã°ÂÂÂ I can get it now and see if they have to pay again I repeat in caps and you can I make ",
             "video": "",
             "premium": false
           },
@@ -56,6 +56,18 @@
             "premium": false
           }
         ]
+      },
+      {
+        "title": "Basics",
+        "premium": false,
+        "lessons": [
+          {
+            "title": "Intro ",
+            "content": "",
+            "video": "",
+            "premium": false
+          }
+        ]
       }
     ]
   },
@@ -72,6 +84,11 @@
   {
     "title": "Python Programing",
     "premium": true,
+    "modules": []
+  },
+  {
+    "title": "Python Programming",
+    "premium": false,
     "modules": []
   }
 ]
