@@ -1,134 +1,323 @@
-/*
-  File 2: admin.html - For admin only
-*/
 <!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>AscendX PRO - Admin</title>
+<title>AscendX Admin</title>
+
 <style>
-body{margin:0;font-family:'Segoe UI',sans-serif;background:linear-gradient(135deg,#6366f1,#0ea5e9);color:#111;overflow-x:hidden;}
-header{text-align:center;padding:20px;font-size:26px;font-weight:bold;color:white;}
-.container{padding:15px;opacity:1;}
-.card{background:white;padding:15px;border-radius:16px;margin-bottom:15px;box-shadow:0 8px 20px rgba(0,0,0,0.15);transition: transform 0.2s, box-shadow 0.2s;}
-.card:hover{transform:scale(1.02);box-shadow:0 12px 25px rgba(0,0,0,0.25);}
-button{padding:8px 12px;border:none;border-radius:8px;background:#6366f1;color:white;font-weight:bold;cursor:pointer;margin-top:6px;transition: all 0.2s;}
-button:hover{background:#4f46e5;box-shadow:0 4px 10px rgba(0,0,0,0.2);}
-input,textarea,select{width:100%;padding:8px;margin-top:6px;border-radius:8px;border:1px solid #ccc;}
-.hidden{display:none;}
-.premiumTag{color:#e11d48;font-weight:bold;}
-.courseTitle{font-size:20px;font-weight:bold;}
-.moduleTitle{margin-left:10px;font-size:18px;color:#333;}
-.lessonTitle{margin-left:20px;font-size:16px;color:#555;}
-.moduleContent,.lessonContentWrapper{display:none;}
+body{
+  font-family:Inter, sans-serif;
+  background:#f4f7fb;
+  margin:0;
+  padding:20px;
+}
+
+h1{margin-bottom:20px}
+
+.card{
+  background:white;
+  padding:20px;
+  border-radius:12px;
+  margin-bottom:20px;
+  box-shadow:0 4px 12px rgba(0,0,0,0.05);
+}
+
+input, select, textarea{
+  padding:8px;
+  border-radius:8px;
+  border:1px solid #ddd;
+  margin-bottom:8px;
+  width:100%;
+}
+
+button{
+  padding:6px 10px;
+  border-radius:8px;
+  border:none;
+  cursor:pointer;
+  margin-left:4px;
+  background:#0b2340;
+  color:white;
+}
+
+button.secondary{
+  background:#eee;
+  color:#333;
+}
+
+.module, .lesson{
+  background:#f9fbff;
+  padding:10px;
+  border-radius:8px;
+  margin-top:10px;
+}
+
+.lesson{
+  background:#eef3ff;
+}
+
+.draggable{
+  cursor:move;
+}
+
+.toolbar button{
+  background:#eee;
+  color:#333;
+}
 </style>
 </head>
 <body>
-<header>🚀 AscendX PRO - Admin</header>
-<div class="container">
+
+<h1>AscendX Admin Panel</h1>
+
 <div class="card">
-<h3>Enter Admin Password</h3>
-<input type="password" id="adminPass" placeholder="Enter code">
-<button onclick="adminLogin()">Login</button>
-<p id="adminStatus"></p>
+  <h3>Select Course</h3>
+  <select id="courseSelect"></select>
+  <button onclick="deleteCourse()">Delete Course</button>
 </div>
-<div id="adminPanel" class="hidden">
+
 <div class="card">
-<h3>GitHub Token</h3>
-<input type="password" id="tokenInput" placeholder="Enter GitHub Token">
-<button onclick="saveToken()">Save Token</button>
-<button onclick="autoSaveGitHub()">Save to GitHub</button>
-<button onclick="syncFromGitHub()">Sync from GitHub</button>
+  <h3>Add New Course</h3>
+  <input id="newCourseTitle" placeholder="Course Title">
+  <button onclick="addCourse()">Add Course</button>
 </div>
+
 <div class="card">
-<h3>Create Course</h3>
-<input id="courseTitle" placeholder="Course Title">
-<label><input type="checkbox" id="coursePremium"> Premium</label>
-<button onclick="addCourse()">Create Course</button>
+  <h3>Add Module</h3>
+  <input id="moduleTitle" placeholder="Module Title">
+  <input id="moduleDesc" placeholder="Module Description">
+  <button onclick="addModule()">Add Module</button>
 </div>
+
 <div class="card">
-<h3>Modules & Lessons</h3>
-<select id="selectCourse"></select>
-<input id="moduleTitle" placeholder="Module Title">
-<label><input type="checkbox" id="modulePremium"> Premium</label>
-<button onclick="addModule()">Add Module</button>
-<br>
-<select id="selectModule"></select>
-<input id="lessonTitle" placeholder="Lesson Title">
-<textarea id="lessonContent" placeholder="Lesson Content"></textarea>
-<input id="lessonVideo" placeholder="Video URL (optional)">
-<label><input type="checkbox" id="lessonPremium"> Premium</label>
-<button onclick="addLesson()">Add Lesson</button>
+  <h3>Add Lesson (to selected module)</h3>
+  <select id="moduleSelect"></select>
+  <input id="lessonTitle" placeholder="Lesson Title">
+  
+  <div class="toolbar">
+    <button onclick="format('bold')">Bold</button>
+    <button onclick="format('italic')">Italic</button>
+    <button onclick="format('insertUnorderedList')">Bullet</button>
+  </div>
+  
+  <div id="lessonContent" contenteditable="true" style="border:1px solid #ddd; padding:10px; border-radius:8px; min-height:120px;"></div>
+  
+  <button onclick="addLesson()">Add Lesson</button>
 </div>
+
+<div class="card">
+  <h3>Structure</h3>
+  <div id="preview"></div>
 </div>
+
+<div class="card">
+  <button onclick="saveToGitHub()">Save to GitHub</button>
 </div>
+
 <script>
-let courses=[];
-let token=localStorage.getItem("githubToken")||"";
-let admin=false;
-const repoOwner="Ray-Sage";
-const repoName="ascendx";
+const USERNAME='Ray-Sage';
+const REPO='AscendX';
+const FILE_PATH='courses.json';
+const TOKEN='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';
 
-function adminLogin(){
- if(adminPass.value==="Ray@AscendX"){
-  admin=true;
-  adminPanel.classList.remove("hidden");
-  adminStatus.innerText="✅ Access Granted";
-  loadCourses();
-  updateSelects();
- } else alert("Wrong code");
-}
+let COURSES=[];
+let currentCourse=0;
 
-function saveToken(){token=tokenInput.value.trim();localStorage.setItem("githubToken",token);alert("Token saved locally");}
+/* INIT */
+window.onload=async()=>{
+  await loadCourses();
+};
 
-// GitHub operations
+/* LOAD */
 async function loadCourses(){
- try{
-  const res=await fetch(`https://api.github.com/repos/${repoOwner}/${repoName}/contents/courses.json`);
-  const data=await res.json();
-  if(data.content){
-   let decoded=atob(data.content);
-   courses=JSON.parse(decoded);
-   updateSelects();
-   localStorage.setItem("courses",JSON.stringify(courses));
+  try{
+    const r=await fetch(`https://raw.githubusercontent.com/${USERNAME}/${REPO}/main/${FILE_PATH}`);
+    COURSES=await r.json();
+  }catch{
+    COURSES=[];
   }
- }catch(e){console.log('GitHub fetch failed, using localStorage'); courses=JSON.parse(localStorage.getItem("courses"))||[];}
+  render();
 }
 
-function autoSaveGitHub(){
- if(!token) return alert('Enter your GitHub token first');
- fetch(`https://api.github.com/repos/${repoOwner}/${repoName}/contents/courses.json`).then(res=>res.json()).then(data=>{
-  fetch(`https://api.github.com/repos/${repoOwner}/${repoName}/contents/courses.json`,{
-   method:'PUT',
-   headers:{Authorization:`token ${token}`,'Content-Type':'application/json'},
-   body:JSON.stringify({message:'Update courses',content:btoa(unescape(encodeURIComponent(JSON.stringify(courses,null,2)))),sha:data.sha})
-  }).then(()=>alert('Saved to GitHub')).catch(e=>alert('GitHub save failed'));
- });
+/* RENDER */
+function render(){
+  renderCourseSelect();
+  renderModuleSelect();
+  renderPreview();
 }
 
-function syncFromGitHub(){loadCourses().then(()=>alert('Courses synced from GitHub'))}
-
-// Add/Edit/Delete
-function addCourse(){let title=courseTitle.value;if(!title)return alert('Enter title');
- courses.push({title,premium:coursePremium.checked,modules:[]});courseTitle.value='';coursePremium.checked=false;saveLocal();updateSelects();}
-function addModule(){let cIndex=selectCourse.selectedIndex;if(cIndex<0)return alert('Select course');
- let title=moduleTitle.value;if(!title)return alert('Enter module');
- courses[cIndex].modules.push({title,premium:modulePremium.checked,lessons:[]});moduleTitle.value='';modulePremium.checked=false;saveLocal();updateSelects();}
-function addLesson(){let cIndex=selectCourse.selectedIndex,mIndex=selectModule.selectedIndex;
- if(cIndex<0||mIndex<0)return alert('Select course/module');
- let title=lessonTitle.value,content=lessonContent.value,video=lessonVideo.value;
- courses[cIndex].modules[mIndex].lessons.push({title,content,video,premium:lessonPremium.checked});
- lessonTitle.value='';lessonContent.value='';lessonVideo.value='';lessonPremium.checked=false;saveLocal();}
-
-function saveLocal(){localStorage.setItem('courses',JSON.stringify(courses));}
-
-function updateSelects(){
- selectCourse.innerHTML='';selectModule.innerHTML='';
- courses.forEach(c=>{let o=document.createElement('option');o.text=c.title;selectCourse.add(o);});
- let cIndex=selectCourse.selectedIndex;if(cIndex>=0){courses[cIndex].modules.forEach(m=>{let o=document.createElement('option');o.text=m.title;selectModule.add(o);});}
+function renderCourseSelect(){
+  const sel=document.getElementById('courseSelect');
+  sel.innerHTML='';
+  COURSES.forEach((c,i)=>{
+    const o=document.createElement('option');
+    o.value=i;
+    o.textContent=c.title;
+    sel.appendChild(o);
+  });
+  sel.value=currentCourse;
+  sel.onchange=e=>{
+    currentCourse=+e.target.value;
+    render();
+  }
 }
-selectCourse.onchange=updateSelects;
+
+function renderModuleSelect(){
+  const sel=document.getElementById('moduleSelect');
+  sel.innerHTML='';
+  const mods=COURSES[currentCourse]?.modules||[];
+  mods.forEach((m,i)=>{
+    const o=document.createElement('option');
+    o.value=i;
+    o.textContent=m.title;
+    sel.appendChild(o);
+  });
+}
+
+function renderPreview(){
+  const div=document.getElementById('preview');
+  div.innerHTML='';
+  const course=COURSES[currentCourse];
+  if(!course) return;
+
+  course.modules?.forEach((m,mi)=>{
+    const mod=document.createElement('div');
+    mod.className='module draggable';
+    mod.draggable=true;
+    mod.ondragstart=e=>dragStart(e,mi,'module');
+    mod.innerHTML=`
+      <strong>${m.title}</strong>
+      <button onclick="moveModule(${mi},-1)">↑</button>
+      <button onclick="moveModule(${mi},1)">↓</button>
+      <button onclick="editModule(${mi})">Edit</button>
+      <button onclick="deleteModule(${mi})">Delete</button>
+    `;
+    m.lessons?.forEach((l,li)=>{
+      const les=document.createElement('div');
+      les.className='lesson draggable';
+      les.draggable=true;
+      les.ondragstart=e=>dragStart(e,li,'lesson',mi);
+      les.innerHTML=`
+        ${l.title}
+        <button onclick="moveLesson(${mi},${li},-1)">↑</button>
+        <button onclick="moveLesson(${mi},${li},1)">↓</button>
+        <button onclick="editLesson(${mi},${li})">Edit</button>
+        <button onclick="deleteLesson(${mi},${li})">Delete</button>
+      `;
+      mod.appendChild(les);
+    });
+    div.appendChild(mod);
+  });
+}
+
+/* COURSE */
+function addCourse(){
+  const title=document.getElementById('newCourseTitle').value;
+  if(!title) return;
+  COURSES.push({title,modules:[]});
+  currentCourse=COURSES.length-1;
+  render();
+}
+
+function deleteCourse(){
+  if(!confirm('Delete course?')) return;
+  COURSES.splice(currentCourse,1);
+  currentCourse=0;
+  render();
+}
+
+/* MODULE */
+function addModule(){
+  const t=document.getElementById('moduleTitle').value;
+  const d=document.getElementById('moduleDesc').value;
+  if(!t) return;
+  COURSES[currentCourse].modules.push({title:t,desc:d,lessons:[]});
+  render();
+}
+
+function deleteModule(i){
+  COURSES[currentCourse].modules.splice(i,1);
+  render();
+}
+
+function editModule(i){
+  const n=prompt('New module title');
+  if(n) COURSES[currentCourse].modules[i].title=n;
+  render();
+}
+
+function moveModule(i,d){
+  const mods=COURSES[currentCourse].modules;
+  if(i+d<0||i+d>=mods.length) return;
+  [mods[i],mods[i+d]]=[mods[i+d],mods[i]];
+  render();
+}
+
+/* LESSON */
+function addLesson(){
+  const mi=document.getElementById('moduleSelect').value;
+  const title=document.getElementById('lessonTitle').value;
+  const content=document.getElementById('lessonContent').innerHTML;
+  if(!title) return;
+  COURSES[currentCourse].modules[mi].lessons.push({title,content});
+  render();
+}
+
+function deleteLesson(mi,li){
+  COURSES[currentCourse].modules[mi].lessons.splice(li,1);
+  render();
+}
+
+function editLesson(mi,li){
+  const n=prompt('New lesson title');
+  if(n) COURSES[currentCourse].modules[mi].lessons[li].title=n;
+  render();
+}
+
+function moveLesson(mi,li,d){
+  const les=COURSES[currentCourse].modules[mi].lessons;
+  if(li+d<0||li+d>=les.length) return;
+  [les[li],les[li+d]]=[les[li+d],les[li]];
+  render();
+}
+
+/* DRAG */
+function dragStart(e,index,type,mi){
+  e.dataTransfer.setData('index',index);
+  e.dataTransfer.setData('type',type);
+  if(mi!==undefined) e.dataTransfer.setData('moduleIndex',mi);
+}
+
+/* RICH TEXT */
+function format(cmd){
+  document.execCommand(cmd,false,null);
+}
+
+/* SAVE */
+async function saveToGitHub(){
+  const res=await fetch(`https://api.github.com/repos/${USERNAME}/${REPO}/contents/${FILE_PATH}`,{
+    headers:{Authorization:`token ${TOKEN}`}
+  });
+  const data=await res.json();
+  const sha=data.sha;
+
+  await fetch(`https://api.github.com/repos/${USERNAME}/${REPO}/contents/${FILE_PATH}`,{
+    method:'PUT',
+    headers:{
+      Authorization:`token ${TOKEN}`,
+      'Content-Type':'application/json'
+    },
+    body:JSON.stringify({
+      message:'Update courses',
+      content:btoa(unescape(encodeURIComponent(JSON.stringify(COURSES,null,2)))),
+      sha
+    })
+  });
+
+  alert('Saved to GitHub!');
+}
 </script>
+
 </body>
 </html>
