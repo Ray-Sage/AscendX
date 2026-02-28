@@ -1,191 +1,392 @@
 <!doctype html>
 <html lang="en">
 <head>
-<meta charset="UTF-8"/>
-<meta name="viewport" content="width=device-width,initial-scale=1"/>
-<title>AscendX Academy • Courses</title>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>AscendX Academy — Student</title>
 <style>
 :root{
-  --navy:#0b2340; --teal:#2aa6a1; --gold:#cfa939;
-  --muted:#6b7785; --bg:#f6f8fb; --card:#fff;
+  --navy:#0b2340; --teal:#2aa6a1; --gold:#cfa939; --muted:#6b7785;
+  --bg:#f6f8fb; --card:#fff; --radius:12px; --maxw:1100px;
 }
 *{box-sizing:border-box}
-body{
-  margin:0; font-family:Inter,Arial,sans-serif;
-  background:var(--bg); color:var(--navy);
-}
-.wrap{max-width:1100px;margin:auto;padding:15px}
-header{background:#fff;padding:10px;display:flex;align-items:center;gap:12px;border-bottom:1px solid #e6eef3}
-.logo{width:44px;height:44px;background:linear-gradient(135deg,var(--navy),#123a57);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:800;border-radius:8px}
-.title{font-size:20px;font-weight:700}
+body{margin:0;font-family:Inter, system-ui, Arial, sans-serif;background:var(--bg);color:var(--navy);-webkit-font-smoothing:antialiased;}
+.wrap{max-width:var(--maxw);margin:0 auto;padding:12px;}
+header{display:flex;align-items:center;gap:12px;background:#fff;padding:10px;border-bottom:1px solid #e6eef3;position:sticky;top:0;z-index:20}
+.logo{width:44px;height:44px;border-radius:8px;background:linear-gradient(135deg,var(--navy),#123a57);display:flex;align-items:center;justify-content:center;color:#fff;font-weight:800}
+.title{font-weight:700}
 .subtitle{font-size:13px;color:var(--muted)}
-
-.card{background:var(--card);padding:14px;border-radius:12px;margin-top:12px;border:1px solid rgba(11,35,64,0.07)}
-
-h2{margin-top:0;margin-bottom:8px}
-
-.module{border:1px solid #e6edf3;border-radius:10px;padding:12px;margin-bottom:10px;transition:transform .2s;}
-.module:hover{transform:scale(1.01);}
-.lesson-list{margin-top:10px;display:none;opacity:0;transition:opacity .3s;}
-.lesson{margin-top:8px;background:#f7fbfb;padding:8px;border-radius:8px;}
-
-.badge-free{color:var(--teal);font-weight:700}
-.badge-premium{color:var(--gold);font-weight:700}
-
-.btn{padding:6px 10px;border-radius:8px;cursor:pointer;border:0}
+.statusBar{margin-top:12px;display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.status{font-size:13px;color:var(--muted);padding:8px 12px;background:#fff;border-radius:10px;border:1px solid rgba(11,35,64,0.04)}
+.btn{padding:8px 12px;border-radius:8px;border:0;cursor:pointer}
 .btn.primary{background:var(--navy);color:#fff}
 .btn.secondary{background:#fff;border:1px solid var(--navy);color:var(--navy)}
-
-.video-wrap{position:relative;padding-top:56%;margin-top:10px;border-radius:8px;overflow:hidden}
-.video-wrap iframe{position:absolute;top:0;left:0;width:100%;height:100%;border:0}
-
-textarea{width:100%;height:120px;border:1px solid #e6edf3;border-radius:8px;padding:8px;margin-top:8px;font-family:monospace;}
-.preview{height:220px;border:1px solid #e6edf3;border-radius:8px;margin-top:8px;overflow:hidden}
+.card{background:var(--card);border-radius:12px;padding:14px;margin-top:12px;border:1px solid rgba(11,35,64,0.04)}
+main{display:grid;grid-template-columns:1fr 360px;gap:16px;margin-top:12px}
+@media(max-width:900px){main{grid-template-columns:1fr}}
+.course{margin-bottom:14px}
+.courseHeader{display:flex;justify-content:space-between;align-items:center;gap:12px}
+.courseTitle{font-size:18px;font-weight:700}
+.module{padding:12px;border-radius:10px;border:1px solid #e6eef3;background:#fff;margin-top:10px;transition:transform 0.2s, box-shadow 0.2s}
+.module:hover{transform:translateY(-3px);box-shadow:0 10px 30px rgba(11,35,64,0.06)}
+.moduleTitle{display:flex;justify-content:space-between;align-items:center;gap:8px;cursor:pointer}
+.moduleDesc{color:var(--muted);margin-top:6px}
+.lesson-list{margin-top:10px;max-height:0;overflow:hidden;transition:max-height 0.35s ease,opacity 0.25s ease;opacity:0}
+.lesson-list.show{max-height:1200px;opacity:1}
+.lesson{padding:10px;border-radius:8px;background:#f7fbfb;margin-top:8px;display:flex;justify-content:space-between;align-items:flex-start;gap:8px}
+.lessonLeft{max-width:72%}
+.lessonTitle{font-weight:700}
+.lessonText{color:#334155;margin-top:6px;white-space:pre-wrap}
+.badge{font-weight:700}
+.badge.free{color:var(--teal)}
+.badge.premium{color:var(--gold)}
+.video-wrap{position:relative;padding-top:56%;border-radius:8px;overflow:hidden;margin-top:10px;display:none;border:1px solid #e6edf3}
+.video-wrap iframe{position:absolute;left:0;top:0;width:100%;height:100%;border:0}
+.playBtn{padding:6px 10px;border-radius:8px;border:0;background:#0b2340;color:#fff;cursor:pointer}
+.preview{height:240px;border-radius:8px;border:1px solid #e6edf3;overflow:hidden;margin-top:8px}
+.small{font-size:13px;color:var(--muted)}
+.footerNote{margin-top:12px;color:var(--muted);font-size:13px}
 </style>
 </head>
 <body>
-
 <div class="wrap">
+  <header>
+    <div class="logo">AX</div>
+    <div>
+      <div class="title">AscendX Academy</div>
+      <div class="subtitle">Courses • Modules • Lessons</div>
+    </div>
+  </header>
 
-<header>
-  <div class="logo">AX</div>
-  <div>
-    <div class="title">AscendX Academy</div>
-    <div class="subtitle">Learn • Build • Grow</div>
+  <div class="statusBar">
+    <div id="status" class="status">Status: <span id="statusText">Starting…</span></div>
+    <button id="refreshBtn" class="btn secondary">Refresh Content</button>
+    <div id="lastSync" class="status">Last sync: <span id="lastSyncText">—</span></div>
   </div>
-</header>
 
-<div id="courses-container">Loading courses…</div>
+  <main>
+    <section>
+      <div id="coursesContainer"></div>
+      <div class="card footerNote">
+        <strong>About AscendX</strong>
+        <p>Developer: Ray Sage who's also known as Paul Zulu</p>
+      </div>
+    </section>
 
-<div class="card" style="margin-top:20px">
-  <h2>About AscendX</h2>
-  <p>AscendX Academy is a modern learning platform for courses, modules, and lessons — fully open and accessible.</p>
-  <p>Developer: Ray Sage who's also known as Paul Zulu</p>
-</div>
+    <aside>
+      <div class="card">
+        <div style="font-weight:700">Now Playing</div>
+        <div id="currentLessonTitle" style="margin-top:6px;font-weight:600">—</div>
+        <div id="videoWrap" class="video-wrap"><iframe id="lessonFrame" allowfullscreen></iframe></div>
+      </div>
 
+      <div class="card" style="margin-top:12px">
+        <div style="font-weight:700">Code Playground</div>
+        <textarea id="codeInput" style="margin-top:8px"><!doctype html>
+<html>
+<head><meta charset="utf-8"></head>
+<body>
+  <h1>Hello AscendX</h1>
+  <p>Edit & press Run.</p>
+</body>
+</html></textarea>
+
+        <div style="display:flex;gap:8px;margin-top:8px;flex-wrap:wrap">
+          <button id="runBtn" class="btn primary">Run</button>
+          <button id="copyBtn" class="btn secondary">Copy</button>
+          <button id="resetBtn" class="btn">Reset</button>
+        </div>
+
+        <iframe id="codeOutput" class="preview"></iframe>
+      </div>
+    </aside>
+  </main>
 </div>
 
 <script>
-/* ==================
-   GitHub API config
-   ================== */
+/* ----------------------------
+   CONFIG: your GitHub details
+   ---------------------------- */
 const USERNAME = "Ray-Sage";
-const REPO     = "AscendX";
-const FILE_PATH = "courses.json";
+const REPO = "AscendX";
+const FILE_PATH = "courses.json"; // path inside repo
+const LOCAL_KEY = "ascendx_courses_cache_v1";
 
-let DATA = {};
+/* ----------------------------
+   STATE
+   ---------------------------- */
+let DATA = { courses: [] };
 
-// Fetch JSON from GitHub api
-async function fetchFromGitHub(){
-  try{
-    const response = await fetch(
-      `https://api.github.com/repos/${USERNAME}/${REPO}/contents/${FILE_PATH}?t=${Date.now()}`,
-      {cache:"no-store"}
-    );
-    if(!response.ok) throw new Error("Failed to fetch");
-    const json = await response.json();
-    const decoded = atob(json.content);
-    DATA = JSON.parse(decoded);
-  }catch(err){
-    console.error("GitHub fetch error:",err);
-    DATA = {courses:[]};
+/* ----------------------------
+   Helpers
+   ---------------------------- */
+function setStatus(text, ok=true){
+  document.getElementById("statusText").innerText = text;
+  document.getElementById("status").style.borderColor = ok ? 'rgba(11,35,64,0.04)' : '#ffdddd';
+}
+function setLastSync(ts){
+  document.getElementById("lastSyncText").innerText = ts ? new Date(ts).toLocaleString() : '—';
+}
+
+/* Decode base64 safely */
+function safeDecodeBase64(b64){
+  try{ return decodeURIComponent(escape(atob(b64))); }catch(e){
+    try{ return atob(b64); }catch(e2){ return ""; }
   }
-  renderCourses();
 }
 
-// Render all courses + modules + lessons
-function renderCourses(){
-  const container = document.getElementById("courses-container");
-  container.innerHTML="";
+/* ----------------------------
+   Fetch from GitHub API (no CDN cache)
+   ---------------------------- */
+async function fetchFromGitHub(){
+  setStatus("Fetching from GitHub…");
+  try{
+    const url = `https://api.github.com/repos/${USERNAME}/${REPO}/contents/${FILE_PATH}?t=${Date.now()}`;
+    const res = await fetch(url, { cache: "no-store" });
+    if(!res.ok){
+      throw new Error(`GitHub API returned ${res.status}`);
+    }
+    const json = await res.json();
+    if(!json.content){
+      throw new Error("No content in response");
+    }
+    const decoded = safeDecodeBase64(json.content);
+    const parsed = JSON.parse(decoded);
+    // Normalize: if admin saved top-level "modules", convert to courses array
+    if(parsed.modules && !parsed.courses){
+      DATA = { courses: [{ title: "Course", subtitle: "", modules: parsed.modules }] };
+    } else {
+      DATA = parsed;
+    }
+    // Save a local copy for offline fallback
+    localStorage.setItem(LOCAL_KEY, JSON.stringify({ data: DATA, ts: Date.now() }));
+    setStatus("Loaded from GitHub", true);
+    setLastSync(Date.now());
+    renderAll();
+  }catch(err){
+    console.warn("GitHub fetch failed:", err);
+    setStatus("GitHub fetch failed — using local cache/fallback", false);
+    // Try local cache
+    const cacheRaw = localStorage.getItem(LOCAL_KEY);
+    if(cacheRaw){
+      try{
+        const cache = JSON.parse(cacheRaw);
+        DATA = cache.data || { courses: [] };
+        setLastSync(cache.ts || null);
+        renderAll();
+        return;
+      }catch(e){}
+    }
+    // Last resort fallback: empty message
+    DATA = { courses: [] };
+    renderAll();
+  }
+}
 
-  (DATA.courses||[]).forEach((course,cIdx)=>{
+/* ----------------------------
+   Render functions
+   ---------------------------- */
+function renderAll(){
+  const container = document.getElementById("coursesContainer");
+  container.innerHTML = "";
+  if(!DATA || !Array.isArray(DATA.courses) || DATA.courses.length===0){
+    container.innerHTML = `<div class="card"><strong>No courses found</strong><div class="small" style="margin-top:8px">If you are the admin, ensure courses.json exists in ${USERNAME}/${REPO} and follows the structure.</div></div>`;
+    return;
+  }
+
+  DATA.courses.forEach((course, cIdx) => {
     const courseCard = document.createElement("div");
-    courseCard.className="card";
-
+    courseCard.className = "card course";
+    const subtitle = course.subtitle ? `<div class="small">${escapeHtml(course.subtitle)}</div>` : "";
     courseCard.innerHTML = `
-      <h2>${course.title}</h2>
-      <div class="subtitle">${course.subtitle||""}</div>
-      <div id="course-${cIdx}-modules"></div>
-    `;
-
-    container.appendChild(courseCard);
-
-    renderModules(course.modules||[],cIdx);
-  });
-}
-
-// Render modules for a specific course index
-function renderModules(modules, courseIndex){
-  const modulesContainer = document.getElementById(`course-${courseIndex}-modules`);
-  modulesContainer.innerHTML="";
-
-  modules.forEach((m,mIdx)=>{
-    const div = document.createElement("div");
-    div.className="module";
-
-    const badge = m.free
-      ? `<span class="badge-free">FREE</span>`
-      : `<span class="badge-premium">PREMIUM</span>`;
-
-    div.innerHTML = `
-      <div>
-        <strong>${m.title}</strong> ${badge}
-      </div>
-      <div>${m.desc||""}</div>
-      <button class="btn primary" data-toggle="${courseIndex}-${mIdx}">Show Lessons</button>
-      <div class="lesson-list" id="mod-${courseIndex}-${mIdx}-lessons"></div>
-    `;
-    modulesContainer.appendChild(div);
-
-    renderLessons(m.lessons||[],courseIndex,mIdx);
-  });
-}
-
-function renderLessons(lessons, cIdx, mIdx){
-  const lessonList = document.getElementById(`mod-${cIdx}-${mIdx}-lessons`);
-  lessonList.innerHTML="";
-
-  lessons.forEach((les,lIdx)=>{
-    const lv = document.createElement("div");
-    lv.className="lesson";
-    lv.innerHTML = `
-      <div style="display:flex;justify-content:space-between;align-items:center">
-        <div><strong>${les.title}</strong><div>${les.text||""}</div></div>
-        <div style="display:flex;flex-direction:column;gap:6px">
-          ${les.video?`<button class="btn secondary" data-play="${cIdx}-${mIdx}-${lIdx}">Play</button>`:""}
+      <div class="courseHeader">
+        <div>
+          <div class="courseTitle">${escapeHtml(course.title)}</div>
+          ${subtitle}
+        </div>
+        <div>
+          <button class="btn secondary" data-action="toggleCourse" data-course="${cIdx}">Toggle Modules</button>
         </div>
       </div>
+      <div id="course-${cIdx}-modules"></div>
+    `;
+    container.appendChild(courseCard);
+    renderModules(course.modules || [], cIdx);
+  });
+
+  setStatus("Content rendered", true);
+}
+
+/* Render modules inside a specific course container */
+function renderModules(modules, courseIndex){
+  const modulesContainer = document.getElementById(`course-${courseIndex}-modules`);
+  modulesContainer.innerHTML = ""; // clear
+
+  if(!modules || modules.length===0){
+    modulesContainer.innerHTML = `<div class="small muted" style="margin-top:8px">No modules in this course.</div>`;
+    return;
+  }
+
+  modules.forEach((m, mIdx) => {
+    const mDiv = document.createElement("div");
+    mDiv.className = "module";
+    const badge = (m.free === false) ? `<span class="badge premium">PREMIUM</span>` : `<span class="badge free">FREE</span>`;
+    const desc = m.desc ? `<div class="moduleDesc">${escapeHtml(m.desc)}</div>` : "";
+    mDiv.innerHTML = `
+      <div class="moduleTitle" data-action="toggleModule" data-course="${courseIndex}" data-module="${mIdx}">
+        <div><strong>${escapeHtml(m.title)}</strong> ${badge}</div>
+        <div class="small muted">Tap to expand</div>
+      </div>
+      ${desc}
+      <div class="lesson-list" id="lessons-${courseIndex}-${mIdx}"></div>
+    `;
+    modulesContainer.appendChild(mDiv);
+    renderLessons(m.lessons || [], courseIndex, mIdx);
+  });
+}
+
+/* Render lessons for module */
+function renderLessons(lessons, courseIndex, moduleIndex){
+  const lessonList = document.getElementById(`lessons-${courseIndex}-${moduleIndex}`);
+  lessonList.innerHTML = "";
+  if(!lessons || lessons.length===0){
+    lessonList.innerHTML = `<div class="small muted" style="margin-top:8px">No lessons yet.</div>`;
+    return;
+  }
+  lessons.forEach((les, lIdx) => {
+    const lv = document.createElement("div");
+    lv.className = "lesson";
+    const safeText = les.text ? escapeHtml(les.text) : "";
+    const playButton = les.video ? `<button class="playBtn" data-action="play" data-course="${courseIndex}" data-module="${moduleIndex}" data-lesson="${lIdx}">Play</button>` : "";
+    lv.innerHTML = `
+      <div class="lessonLeft">
+        <div class="lessonTitle">${escapeHtml(les.title)}</div>
+        <div class="lessonText">${safeText}</div>
+      </div>
+      <div class="lessonRight">${playButton}</div>
     `;
     lessonList.appendChild(lv);
   });
 }
 
-// Global click listener for toggle + play
-document.addEventListener("click",(e)=>{
-  // Toggle lesson list
-  if(e.target.dataset.toggle){
-    const [cIdx,mIdx] = e.target.dataset.toggle.split("-");
-    const el = document.getElementById(`mod-${cIdx}-${mIdx}-lessons`);
-    el.style.display = el.style.display==="block"?"none":"block";
+/* ----------------------------
+   Event handling (delegated)
+   ---------------------------- */
+document.addEventListener("click", (ev) => {
+  const t = ev.target;
+  const action = t.getAttribute("data-action");
+  if(!action) return;
+
+  if(action === "toggleCourse"){
+    const cIdx = t.getAttribute("data-course");
+    // toggle visibility of modules for course
+    const container = document.getElementById(`course-${cIdx}-modules`);
+    if(container) container.style.display = container.style.display === "block" ? "none" : "block";
   }
 
-  // Play video
-  if(e.target.dataset.play){
-    const [cIdx,mIdx,lIdx] = e.target.dataset.play.split("-");
-    const les = DATA.courses[cIdx].modules[mIdx].lessons[lIdx];
-    document.getElementById("current-lesson-title").innerText = les.title;
+  if(action === "toggleModule"){
+    const cIdx = t.getAttribute("data-course");
+    const mIdx = t.getAttribute("data-module");
+    const list = document.getElementById(`lessons-${cIdx}-${mIdx}`);
+    if(list) list.classList.toggle("show");
+  }
 
-    if(les.video){
-      const videoWrap = document.getElementById("sidebar-video");
-      document.getElementById("lesson-video").src = les.video;
-      videoWrap.style.display="block";
-    }
+  if(action === "play"){
+    const cIdx = parseInt(t.getAttribute("data-course"),10);
+    const mIdx = parseInt(t.getAttribute("data-module"),10);
+    const lIdx = parseInt(t.getAttribute("data-lesson"),10);
+    playLesson(cIdx, mIdx, lIdx);
   }
 });
 
-// Initialize
-fetchFromGitHub();
-</script>
+/* ----------------------------
+   Play a lesson in the sidebar
+   ---------------------------- */
+function playLesson(cIdx, mIdx, lIdx){
+  try{
+    const les = DATA.courses[cIdx].modules[mIdx].lessons[lIdx];
+    if(!les) return;
+    document.getElementById("currentLessonTitle").innerText = les.title || "Lesson";
+    if(les.video){
+      document.getElementById("lessonFrame").src = les.video;
+      document.getElementById("videoWrap").style.display = "block";
+    } else {
+      document.getElementById("lessonFrame").src = "";
+      document.getElementById("videoWrap").style.display = "none";
+    }
+  }catch(e){
+    console.error("Play error", e);
+  }
+}
 
+/* ----------------------------
+   Utilities
+   ---------------------------- */
+function escapeHtml(s){
+  if(!s) return "";
+  return String(s)
+    .replace(/&/g,'&amp;')
+    .replace(/</g,'&lt;')
+    .replace(/>/g,'&gt;');
+}
+
+/* ----------------------------
+   Refresh button
+   ---------------------------- */
+document.getElementById("refreshBtn").addEventListener("click", async ()=>{
+  setStatus("Refreshing…");
+  await fetchFromGitHub();
+});
+
+/* ----------------------------
+   Code playground (GitHub Pages safe)
+   ---------------------------- */
+function wirePlayground(){
+  const runBtn = document.getElementById("runBtn");
+  const copyBtn = document.getElementById("copyBtn");
+  const resetBtn = document.getElementById("resetBtn");
+  const codeInput = document.getElementById("codeInput");
+  const codeOutput = document.getElementById("codeOutput");
+
+  // run
+  runBtn.addEventListener("click", ()=>{ codeOutput.srcdoc = codeInput.value; });
+
+  // copy
+  copyBtn.addEventListener("click", async ()=>{
+    try{
+      await navigator.clipboard.writeText(codeInput.value);
+      alert("Code copied to clipboard");
+    }catch(e){
+      alert("Copy failed");
+    }
+  });
+
+  // reset
+  resetBtn.addEventListener("click", ()=>{
+    const defaultCode = `<!doctype html>
+<html>
+<head><meta charset="utf-8"></head>
+<body>
+  <h1>Hello AscendX</h1>
+  <p>Edit & press Run.</p>
+</body>
+</html>`;
+    codeInput.value = defaultCode;
+    codeOutput.srcdoc = defaultCode;
+  });
+
+  // auto-run initial
+  codeOutput.srcdoc = codeInput.value;
+}
+
+/* ----------------------------
+   Start
+   ---------------------------- */
+window.addEventListener("load", async ()=>{
+  setStatus("Initialising…");
+  wirePlayground();
+  await fetchFromGitHub();
+});
+</script>
 </body>
 </html>
