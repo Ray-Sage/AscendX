@@ -1,268 +1,279 @@
-<!DOCTYPE html>
-<html>
+<!DOCTYPE html><html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>AscendX Pro Max</title>
-
+<title>AscendX Pro App</title>
 <style>
-body{
-  margin:0;
-  font-family:'Segoe UI',sans-serif;
-  background:linear-gradient(135deg,#6366f1,#0ea5e9);
-  color:#111;
+/* ===== General Styles ===== */
+body {
+  margin: 0;
+  font-family: 'Segoe UI', sans-serif;
+  background: linear-gradient(135deg, #6366f1, #0ea5e9);
+  color: #111;
+  overflow-x: hidden;
 }
-
-header{
-  text-align:center;
-  padding:20px;
-  font-size:26px;
-  font-weight:bold;
+header {
+  text-align: center;
+  padding: 20px;
+  font-size: 26px;
+  font-weight: bold;
+  color: white;
+}
+.container {
+  padding: 15px;
+  opacity: 0;
+  transition: opacity 1s ease;
+}
+.card {
+  background: white;
+  padding: 15px;
+  border-radius: 16px;
+  margin-bottom: 15px;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+  animation: fade .3s ease;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+.card:hover {
+  transform: scale(1.02);
+  box-shadow: 0 12px 25px rgba(0,0,0,0.25);
+}
+button {
+  padding: 8px 12px;
+  border: none;
+  border-radius: 8px;
+  background: #6366f1;
+  color: white;
+  font-weight: bold;
+  cursor: pointer;
+  margin-top: 6px;
+  transition: all 0.2s;
+}
+button:hover {
+  background: #4f46e5;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+}
+input, textarea {
+  width: 100%;
+  padding: 8px;
+  margin-top: 6px;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+}
+.hidden { display: none; }
+.fullscreen {
+  position: fixed;
+  top:0; left:0;
+  width:100%; height:100%;
+  background: white;
+  overflow:auto;
+  z-index:999;
+  padding:15px;
+  transition: transform 0.3s ease, opacity 0.3s;
+}
+.progressBar {
+  height:8px;
+  background:#ddd;
+  border-radius:8px;
+  overflow:hidden;
+  margin-top:6px;
+}
+.progressFill {
+  height:100%;
+  width:0%;
+  background:#0ea5e9;
+  transition: width 0.5s ease;
+}
+.premiumTag { color:#e11d48;font-weight:bold; }
+.lessonContent iframe {
+  width:100%;
+  height:200px;
+  border:none;
+  margin-top:10px;
+  border-radius:12px;
+}
+.quizOption { display:block;margin-top:6px; }
+.correct { color:green;font-weight:bold; animation:feedbackBounce 0.4s; }
+.wrong { color:red;font-weight:bold; animation:feedbackShake 0.4s; }
+#splash {
+  position: fixed; top:0; left:0; width:100%; height:100%;
+  background:#0ea5e9;
   color:white;
+  display:flex;
+  flex-direction: column;
+  align-items:center;
+  justify-content:center;
+  font-size:28px;
+  z-index:1000;
+  transition:opacity 1s;
 }
-
-.container{padding:15px;}
-
-.card{
+#aboutCard {
+  position: fixed; bottom:10px; right:10px;
   background:white;
   padding:15px;
   border-radius:16px;
-  margin-bottom:15px;
-  box-shadow:0 8px 20px rgba(0,0,0,0.15);
-  animation:fade .4s ease;
+  box-shadow:0 5px 15px rgba(0,0,0,0.2);
+  max-width:90%;
+  display:none;
+  transition: transform 0.3s ease, opacity 0.3s ease;
 }
-
-button{
-  padding:10px 14px;
-  border:none;
-  border-radius:8px;
-  background:#6366f1;
-  color:white;
-  font-weight:bold;
-  cursor:pointer;
-  margin-top:6px;
-}
-
-input,textarea{
-  width:100%;
-  padding:8px;
-  margin-top:8px;
-  border-radius:8px;
-  border:1px solid #ccc;
-}
-
-.premiumTag{color:#e11d48;font-weight:bold;}
-.locked{background:#f3f4f6;padding:10px;border-radius:10px;}
-
-.progressBar{height:10px;background:#ddd;border-radius:10px;overflow:hidden;}
-.progressFill{height:100%;width:0;background:#0ea5e9;transition:.4s;}
-
-@keyframes fade{
-from{opacity:0;transform:translateY(10px);}
-to{opacity:1;transform:translateY(0);}
-}
-
-.confetti{
-position:fixed;width:10px;height:10px;top:-10px;
-animation:fall 2s linear forwards;
-}
-@keyframes fall{
-to{transform:translateY(100vh) rotate(720deg);opacity:0;}
-}
+@keyframes fade { from{opacity:0; transform:translateY(10px);} to{opacity:1; transform:translateY(0);} }
+@keyframes feedbackBounce { 0%{transform:translateY(-10px);opacity:0;}50%{transform:translateY(5px);opacity:1;}100%{transform:translateY(0);} }
+@keyframes feedbackShake { 0%{transform:translateX(0);}25%{transform:translateX(-5px);}50%{transform:translateX(5px);}75%{transform:translateX(-5px);}100%{transform:translateX(0);} }
 </style>
 </head>
-
-<body>
-
-<header>🚀 AscendX PRO MAX</header>
-
-<div class="container">
-
-<!-- ADMIN LOGIN -->
-<div class="card">
-<h3>🔑 Admin Login</h3>
-<input type="password" id="adminPass" placeholder="Admin Password">
-<button onclick="adminLogin()">Login</button>
-<p id="adminStatus"></p>
+<body><!-- Splash Screen --><div id="splash">AscendX PRO<br><small>Empowering Learning, Everywhere</small></div><header>🚀 AscendX PRO</header>
+<div class="container">  <!-- Admin Login Card -->  <div class="card">
+    <h3>Admin Login</h3>
+    <input type="password" id="adminPass" placeholder="Enter password">
+    <button onclick="adminLogin()">Login</button>
+    <p id="adminStatus"></p>
+  </div>  <!-- Admin Panel -->  <div id="adminPanel" class="hidden">
+    <div class="card">
+      <h3>GitHub Token</h3>
+      <input type="password" id="tokenInput" placeholder="GitHub Token">
+      <button onclick="saveToken()">Save Token</button>
+      <button onclick="syncFromGitHub()">Sync</button>
+    </div><div class="card">
+  <h3>Create Course</h3>
+  <input id="courseTitle" placeholder="Course Title">
+  <label><input type="checkbox" id="coursePremium"> Premium</label>
+  <button onclick="addCourse()">Create Course</button>
 </div>
 
-<!-- ADMIN ONLY PANEL -->
-<div id="adminPanel" style="display:none;">
+  </div>  <!-- Course List -->  <div id="courseList"></div>  <!-- About Button --><button onclick="showAbout()">About AscendX</button>
 
-<div class="card">
-<h3>🔐 GitHub Token</h3>
-<input type="password" id="tokenInput" placeholder="GitHub Token">
-<button onclick="saveToken()">Save Token</button>
-<button onclick="loadFromGitHub()">Sync From GitHub</button>
-<p id="tokenStatus"></p>
-</div>
+  <!-- Mute Sounds Toggle --><button onclick="toggleMute()" id="muteBtn">Mute Sounds</button>
 
-<div class="card">
-<h3>➕ Create Lesson</h3>
-<input id="lessonTitle" placeholder="Lesson Title">
-<textarea id="lessonContent" placeholder="Lesson Content"></textarea>
-<label><input type="checkbox" id="isPremium"> Premium</label><br>
-<button onclick="addLesson()">Save Lesson</button>
-</div>
-
-</div>
-
-<div class="card">
-<h3>🔎 Search</h3>
-<input id="searchInput" oninput="renderLessons()" placeholder="Search lessons...">
-</div>
-
-<div class="card">
-<h3>📊 Progress</h3>
-<div class="progressBar">
-<div class="progressFill" id="progressFill"></div>
-</div>
-</div>
-
-<div id="lessonList"></div>
-
-</div>
-
-<script>
+</div><!-- Course Fullscreen View --><div id="courseView" class="fullscreen hidden"></div><!-- About Card --><div id="aboutCard" class="card">
+  <h3>About AscendX</h3>
+  <p>Empowering global learners through cutting-edge education.</p>
+  <p>Developer: Ray Sage who's also known as Paul Zulu</p>
+  <button onclick="closeAbout()">Close</button>
+</div><script>
+/* ===== Global Variables ===== */
 const owner="Ray-Sage";
 const repo="ascendx";
-const path="lessons.json";
+const path="courses.json";
+let courses = JSON.parse(localStorage.getItem("courses")) || [];
+let token = localStorage.getItem("githubToken") || "";
+let completed = JSON.parse(localStorage.getItem("completed")) || {};
+let premiumUnlocked = localStorage.getItem("premium") || false;
+let admin = false;
+let studentName = localStorage.getItem("studentName") || "Student";
+let muted = false;
 
-let lessons=JSON.parse(localStorage.getItem("lessons"))||[];
-let completed=JSON.parse(localStorage.getItem("completed"))||[];
-let token=localStorage.getItem("githubToken")||"";
-let premiumUnlocked=localStorage.getItem("premium")||false;
-let admin=false;
-let editingIndex=null;
+// Sounds
+const soundCorrect = new Audio("data:audio/wav;base64,UklGRiQAAABXQVZFZm10IBAAAAABAAEAIlYAAESsAAACABAAZGF0YQAAAAA=");
+const soundWrong = new Audio("data:audio/wav;base64,UklGRiQAAABXQVZFZm10IBAAAAABAAEAIlYAAESsAAACABAAZGF0YQAAAAA=");
+const soundDing = new Audio("data:audio/wav;base64,UklGRiQAAABXQVZFZm10IBAAAAABAAEAIlYAAESsAAACABAAZGF0YQAAAAA=");
 
+function playSound(audio){ if(!muted) audio.play(); }
+
+/* ===== Splash Screen ===== */
+window.onload = function(){
+  setTimeout(()=>{
+    document.getElementById('splash').style.opacity=0;
+    document.getElementById('splash').style.pointerEvents='none';
+    document.querySelector('.container').style.opacity=1;
+  },1500);
+};
+
+/* ===== About Card ===== */
+function showAbout(){
+  let card=document.getElementById('aboutCard');
+  card.style.display='block';
+  card.style.opacity=0;
+  setTimeout(()=>{card.style.opacity=1;},10);
+}
+function closeAbout(){
+  let card=document.getElementById('aboutCard');
+  card.style.opacity=0;
+  setTimeout(()=>{card.style.display='none';},300);
+}
+
+/* ===== Mute Toggle ===== */
+function toggleMute(){
+  muted = !muted;
+  document.getElementById('muteBtn').innerText = muted ? 'Unmute Sounds' : 'Mute Sounds';
+}
+
+/* ===== Admin Functions ===== */
 function adminLogin(){
-if(document.getElementById("adminPass").value==="admin123"){
-admin=true;
-document.getElementById("adminPanel").style.display="block";
-document.getElementById("adminStatus").innerText="✅ Admin Logged In";
-document.getElementById("tokenInput").value=token;
-}else alert("Wrong password");
+  if(adminPass.value === "Ray@AscendX"){
+    admin=true;
+    adminPanel.classList.remove("hidden");
+    adminStatus.innerText="✅ Admin Logged In";
+    tokenInput.value = token;
+  } else alert("Wrong password");
 }
-
 function saveToken(){
-token=document.getElementById("tokenInput").value.trim();
-localStorage.setItem("githubToken",token);
-document.getElementById("tokenStatus").innerText="Token Saved";
+  token = tokenInput.value.trim();
+  localStorage.setItem("githubToken",token);
+  alert("Token saved");
 }
 
-function addLesson(){
-let title=lessonTitle.value;
-let content=lessonContent.value;
-let premium=isPremium.checked;
-if(!title||!content) return alert("Fill all fields");
-
-lessons.push({title,content,premium});
-localStorage.setItem("lessons",JSON.stringify(lessons));
-autoSaveGitHub();
-renderLessons();
-
-lessonTitle.value="";lessonContent.value="";isPremium.checked=false;
+/* ===== Courses & Modules ===== */
+function addCourse(){
+  let title = courseTitle.value;
+  if(!title) return alert("Enter title");
+  courses.push({title, premium:coursePremium.checked, modules:[]});
+  localStorage.setItem("courses",JSON.stringify(courses));
+  autoSaveGitHub();
+  renderCourses();
+  courseTitle.value="";
+  coursePremium.checked=false;
+}
+function renderCourses(){
+  courseList.innerHTML="";
+  courses.forEach((course,i)=>{
+    let card=document.createElement("div");
+    card.className="card";
+    if(course.premium) card.innerHTML+="<div class='premiumTag'>⭐ Premium Course</div>";
+    card.innerHTML+=`<h3>${course.title}</h3><button onclick="openCourse(${i})">Open Course</button>`;
+    courseList.appendChild(card);
+  });
 }
 
-function renderLessons(){
-lessonList.innerHTML="";
-let search=searchInput.value.toLowerCase();
-
-lessons.forEach((lesson,i)=>{
-if(!lesson.title.toLowerCase().includes(search)) return;
-
-let card=document.createElement("div");
-card.className="card";
-
-if(lesson.premium) card.innerHTML+="<div class='premiumTag'>⭐ PREMIUM</div>";
-card.innerHTML+=`<h3>${lesson.title}</h3>`;
-
-card.innerHTML+=`<p>${lesson.content}</p>
-<button onclick="markComplete(${i})">Complete</button>`;
-
-lessonList.appendChild(card);
+/* ===== Open Course ===== */
+function openCourse(index){
+  let course=courses[index];
+  if(course.premium && !premiumUnlocked){
+    let code=prompt("Enter Premium Code:");
+    if(code!="premium123") return alert("Locked");
+    premiumUnlocked=true; localStorage.setItem("premium",true);
+  }
+  courseView.innerHTML=""; courseView.classList.remove("hidden");
+  if(!studentName || studentName==="Student"){
+    studentName=prompt("Enter your name:")||"Student";
+    localStorage.setItem("studentName",studentName);
+  }
+  let html=`<h2>${course.title}</h2><button onclick="closeCourse()">Back</button>`;
+  html+=`<div class="progressBar"><div class="progressFill" id="courseProgress"></div></div>`;
+  if(admin){
+    html+=`<h3>Add Module</h3><input id="moduleTitle" placeholder="Module Title"><label><input type="checkbox" id="modulePremium"> Premium</label><button onclick="addModule(${index})">Add Module</button>`;
+  }
+  course.modules.forEach((mod,m)=>{
+    html+=`<div class="card" style='transition: all .3s ease;cursor:pointer;' onclick='this.classList.toggle("expanded")'>`;
+    if(mod.premium) html+=`<div class='premiumTag'>⭐ Premium Module</div>`;
+    html+=`<h4>${mod.title}</h4>`;
+    if(admin){
+      html+=`<h5>Add Lesson</h5><input id="lessonTitle${m}" placeholder="Lesson Title"><textarea id="lessonContent${m}" placeholder="Content"></textarea><input id="lessonVideo${m}" placeholder="YouTube Embed URL (optional)"><label><input type='checkbox' id='lessonPremium${m}'> Premium</label><button onclick='addLesson(${index},${m})'>Add Lesson</button>`;}
+mod.lessons.forEach((lesson,l)=>{
+  html+=`<div class='card lessonContent' style='transition: all .3s ease;'>`;
+  if(lesson.premium) html+=`<div class='premiumTag'>⭐ Premium Lesson</div>`;
+  html+=`<b>${lesson.title}</b>`;
+  if(lesson.video) html+=`<iframe src='${lesson.video}' allowfullscreen></iframe>`;
+  html+=`<p>${lesson.content}</p>`;
+  html+=`<button onclick='completeLesson(${index},${m},${l},true)'>Complete Lesson</button></div>`;
 });
+html+=`</div>`;
 
-updateProgress();
-}
+}); html+=<button onclick='generateCertificate(${index})'>Generate Certificate</button><div id='certificatePreview' class='hidden certificatePreview'></div>; courseView.innerHTML=html; updateCourseProgress(index); } function closeCourse(){courseView.classList.add("hidden");}
 
-function markComplete(i){
-if(!completed.includes(i)){
-completed.push(i);
-localStorage.setItem("completed",JSON.stringify(completed));
-updateProgress();
-confetti();
-}
-}
+/* ===== Module & Lesson Functions ===== */ function addModule(courseIndex){ let title = moduleTitle.value; if(!title)return alert("Enter module title"); courses[courseIndex].modules.push({title, premium:modulePremium.checked, lessons:[]}); localStorage.setItem("courses",JSON.stringify(courses)); autoSaveGitHub(); openCourse(courseIndex); } function addLesson(ci,mi){ let title=document.getElementById("lessonTitle"+mi).value; let content=document.getElementById("lessonContent"+mi).value; let video=document.getElementById("lessonVideo"+mi).value.trim(); let premium=document.getElementById("lessonPremium"+mi).checked; if(!title||!content)return alert("Fill fields"); courses[ci].modules[mi].lessons.push({title,content,premium,video:video||null}); localStorage.setItem("courses",JSON.stringify(courses)); autoSaveGitHub(); openCourse(ci); }
 
-function updateProgress(){
-let percent=lessons.length?(completed.length/lessons.length)*100:0;
-progressFill.style.width=percent+"%";
-}
+/* ===== Lesson Progress & Sound Effects ===== */ function completeLesson(ci,mi,li,playSoundFlag=false){ let key=${ci}-${mi}-${li}; completed[key]=true; localStorage.setItem("completed",JSON.stringify(completed)); updateCourseProgress(ci); if(playSoundFlag) playSound(soundDing); } function updateCourseProgress(ci){ let total=0,done=0; courses[ci].modules.forEach((m,mi)=>{ m.lessons.forEach((l,li)=>{ total++; if(completed[${ci}-${mi}-${li}]) done++; }); }); let percent=total?(done/total)*100:0; document.getElementById("courseProgress").style.width=percent+"%"; }
 
-function confetti(){
-for(let i=0;i<25;i++){
-let c=document.createElement("div");
-c.className="confetti";
-c.style.left=Math.random()*100+"vw";
-c.style.background=`hsl(${Math.random()*360},100%,50%)`;
-document.body.appendChild(c);
-setTimeout(()=>c.remove(),2000);
-}
-}
+/* ===== Certificate ===== */ function generateCertificate(ci){ let certDiv=document.getElementById("certificatePreview"); let course=courses[ci]; certDiv.classList.remove("hidden"); certDiv.style.opacity=0; setTimeout(()=>{certDiv.style.opacity=1;},10); certDiv.innerHTML=<h2>🎓 Certificate of Completion</h2><p>This certifies that <b>${studentName}</b></p><p>has successfully completed the course:</p><h3>${course.title}</h3><p>Date: ${new Date().toLocaleDateString()}</p><p>Instructor: Ray-Sage</p><button onclick='downloadCertificate()'>Download Certificate</button>; playSound(soundDing); } function downloadCertificate(){ let doc=document.getElementById("certificatePreview"); let blob=new Blob([doc.innerHTML],{type:"application/html"}); let a=document.createElement("a"); a.href=URL.createObjectURL(blob); a.download="certificate.html"; a.click(); }
 
-async function autoSaveGitHub(){
-if(!token) return;
-
-let content=btoa(JSON.stringify(lessons,null,2));
-let sha=null;
-
-let res=await fetch(`https://api.github.com/repos/${owner}/${repo}/contents/${path}`,{
-headers:{Authorization:"token "+token}
-});
-
-if(res.status===200){
-let data=await res.json();
-sha=data.sha;
-}
-
-await fetch(`https://api.github.com/repos/${owner}/${repo}/contents/${path}`,{
-method:"PUT",
-headers:{
-Authorization:"token "+token,
-"Content-Type":"application/json"
-},
-body:JSON.stringify({
-message:"Update lessons",
-content:content,
-sha:sha
-})
-});
-}
-
-async function loadFromGitHub(){
-if(!token) return alert("Save token first");
-
-let res=await fetch(`https://api.github.com/repos/${owner}/${repo}/contents/${path}`,{
-headers:{Authorization:"token "+token}
-});
-
-if(res.status!==200){
-alert("No lessons.json found yet.");
-return;
-}
-
-let data=await res.json();
-let decoded=atob(data.content);
-lessons=JSON.parse(decoded);
-localStorage.setItem("lessons",JSON.stringify(lessons));
-renderLessons();
-alert("Synced from GitHub");
-}
-
-renderLessons();
-updateProgress();
-</script>
-
-</body>
-</html>
+/* ===== GitHub Sync ===== */ async function autoSaveGitHub(){ if(!token) return; let content=btoa(JSON.stringify(courses,null,2)); let sha=null; let res=await fetch(https://api.github.com/repos/${owner}/${repo}/contents/${path},{headers:{Authorization:"token "+token}}); if(res.status===200){let data=await res.json(); sha=data.sha;} await fetch(https://api.github.com/repos/${owner}/${repo}/contents/${path},{method:"PUT",headers:{Authorization:"token "+token,"Content-Type":"application/json"},body:JSON.stringify({message:"Update courses",content:content,sha:sha})}); } async function syncFromGitHub(){ if(!token) return alert("Save token first"); let res=await fetch
