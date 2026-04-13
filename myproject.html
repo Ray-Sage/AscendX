@@ -27,17 +27,11 @@ const app = initializeApp(firebaseConfig);
 export const auth = getAuth(app);
 export const db = getFirestore(app);
 
-</script>
 
-	<title>My Database</title>
-</head>
-<body>
 
-<input type="number" id="age"> 
-<button id="click">Submit</button>
-<h1 id='me'></h1>
+	
 
-<script> 
+
 let run = document.querySelector('#click');
 run.addEventListener('click' , submit)
 function submit() {
@@ -70,7 +64,19 @@ function submit() {
 	
  }
 }
-  addDoc();
+ 
+
+</script>
+
+	<title>My Database</title>
+</head>
+<body>
+
+<input type="number" id="age"> 
+<button id="click">Submit</button>
+<h1 id='me'></h1>
+
+ 
 </script>
 </body>
 </html>
