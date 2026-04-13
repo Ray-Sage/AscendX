@@ -53,8 +53,9 @@ function submit() {
 			alert('data added successfuly');
 		})
 		
-		.catch((error)=> {
+		.catch((error, err)=> {
 			console.log(error);
+			console.log(err);
 			alert(error);
 		})
 	
