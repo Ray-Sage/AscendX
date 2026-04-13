@@ -50,11 +50,12 @@ function submit() {
 		})
 		
 		.then(()=>{
-			alert('data added successfuly')
+			alert('data added successfuly');
 		})
 		
 		.catch((error)=> {
-			alert(error)
+			console.log(error);
+			alert(error);
 		})
 	
 		alert ('The users age is ' + age);
