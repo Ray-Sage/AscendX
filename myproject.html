@@ -21,12 +21,13 @@ function submit() {
   if (age.length < 2) {
     alert('Age must be valid');
   } else {
-   const docm = addDoc(collection(db, "Gender"), {
+   const docm = await addDoc(collection(db, "Gender"), {
       age: age
     })
     .then(() => {
       alert('Data added successfully');
-	 console.log (docm.id);
+	  console.log (docm.id);
+	
     })
     .catch((error) => {
       console.error(error);
