@@ -48,7 +48,7 @@ window.addEventListener("DOMContentLoaded", () => {
   document.querySelector('#click').addEventListener('click', submit);
 });
 
-
+window.readData = readData;
   async function readData() {
   const querySnapshot = await getDocs(collection(db, "Gender"));
 
