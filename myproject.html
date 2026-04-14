@@ -1,7 +1,12 @@
 <!DOCTYPE html>
 <html>
 <head>
-
+<style>
+  #dd{
+    background: black;
+    color: white;
+  }
+</style>
 <title>My Database</title>
 
 <script type="module"> 
@@ -58,11 +63,11 @@ window.readData = readData;
     const data = doc.data();
 
     output += `
-      <p>
+     <div id="dd"> <p>
         ID: ${doc.id} <br>
         Age: ${data.age}
       </p>
-      <hr>
+      </div>
     `;
   });
 
