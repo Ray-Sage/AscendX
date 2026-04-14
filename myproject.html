@@ -21,6 +21,7 @@ async function submit() {
   if (age.length < 2) {
     alert('Age must be valid');
   } else {
+	  try{
    const docm = await addDoc(collection(db, "Gender"), {
       age: age
     })
@@ -36,7 +37,7 @@ async function submit() {
 
     document.querySelector('#me').innerHTML = `age: ${age}`;
   }
-}
+  }
 
 window.addEventListener("DOMContentLoaded", () => {
   document.querySelector('#click').addEventListener('click', submit);
