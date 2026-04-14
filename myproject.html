@@ -30,13 +30,13 @@ async function submit() {
 	  console.log (docm.id);
 	
     
-    .catch((error) => {
+    
+
+    document.querySelector('#me').innerHTML = `age: ${age}`;
+  } catch((error) => {
       console.error(error);
       alert(error.message);
     });
-
-    document.querySelector('#me').innerHTML = `age: ${age}`;
-  }
   }
 
 window.addEventListener("DOMContentLoaded", () => {
