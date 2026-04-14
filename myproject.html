@@ -32,8 +32,10 @@ window.submit = submit;
 	
 
 
-let run = document.querySelector('#click');
-run.addEventListener('click' , submit)
+window.addEventListener("DOMContentLoaded", () => {
+  let run = document.querySelector('#click');
+  run.addEventListener('click', submit);
+});
 function submit() {
 	const age = document.querySelector('#age').value;
 	
@@ -45,7 +47,7 @@ function submit() {
 	}
 	else{
 	
-  async function addDoc() { addDoc(collection(db, "Gender"), {
+  async function SubmitData() { addDoc(collection(db, "Gender"), {
 			age: age
 		})
 		
