@@ -15,7 +15,7 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
-function submit() {
+async function submit() {
   const age = document.querySelector('#age').value;
 
   if (age.length < 2) {
