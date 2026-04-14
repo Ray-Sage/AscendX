@@ -2,6 +2,8 @@
 <html>
 <head>
 
+<title>My Database</title>
+
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
 import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
@@ -15,40 +17,48 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
+// ✅ MAIN FUNCTION
 async function submit() {
   const age = document.querySelector('#age').value;
 
   if (age.length < 2) {
     alert('Age must be valid');
-  } else {
-    try {
-      const docm = await addDoc(collection(db, "Gender"), {
-        age: age
-      });
+    return;
+  }
 
-      console.log("Document ID:", docm.id);
-      alert('Data added successfully');
+  try {
+    const docm = await addDoc(collection(db, "Gender"), {
+      age: age
+    });
 
-    } catch (error) {
-      console.error(error);
-      alert(error.message);
-    }
+    console.log("Document ID:", docm.id);
+    alert("Data added successfully");
 
-    document.querySelector('#me').innerHTML = `age: ${age}`;
+    document.querySelector('#me').innerHTML = `age: ${age} <br> ID: ${docm.id}`;
+
+  } catch (error) {
+    console.error(error);
+    alert(error.message);
   }
 }
+
+// ✅ CONNECT BUTTON AFTER PAGE LOAD
+window.addEventListener("DOMContentLoaded", () => {
+  document.querySelector('#click').addEventListener('click', submit);
+});
+
 </script>
 
 </head>
-	
- 
+
 <body>
 
-<input type="number" id="age"> 
-<button id="click">Submit</button>
-<h1 id='me'></h1>
+<h2>Firebase Test</h2>
 
- 
-</script>
+<input type="number" id="age" placeholder="Enter age">
+<button id="click">Submit</button>
+
+<h1 id="me"></h1>
+
 </body>
 </html>
