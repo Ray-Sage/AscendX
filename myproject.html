@@ -45,11 +45,11 @@ function submit() {
 		alert('age must be valid');
 		
 	}
-	else{
-	
-  async function SubmitData() { addDoc(collection(db, "Gender"), {
+} return;
+
+	async function SubmitData() { addDoc(collection(db, "Gender"), {
 			age: age
-		})
+		}	)
 		
 		.then(()=>{
 			alert('data added successfuly');
@@ -66,8 +66,8 @@ function submit() {
 		document.querySelector('#me').innerHTML=`age: ${age}`;
 	}
 	
- }
-}
+ 
+
  
 
 </script>
