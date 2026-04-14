@@ -21,27 +21,22 @@ async function submit() {
   if (age.length < 2) {
     alert('Age must be valid');
   } else {
-	  try{
-   const docm = await addDoc(collection(db, "Gender"), {
-      age: age
-    })
-   
-      alert('Data added successfully');
-	  console.log (docm.id);
-	
-    
-    
+    try {
+      const docm = await addDoc(collection(db, "Gender"), {
+        age: age
+      });
 
-    document.querySelector('#me').innerHTML = `age: ${age}`;
-  } catch((error) => {
+      console.log("Document ID:", docm.id);
+      alert('Data added successfully');
+
+    } catch (error) {
       console.error(error);
       alert(error.message);
-    });
-  }
+    }
 
-window.addEventListener("DOMContentLoaded", () => {
-  document.querySelector('#click').addEventListener('click', submit);
-});
+    document.querySelector('#me').innerHTML = `age: ${age}`;
+  }
+}
 </script>
 
 </head>
