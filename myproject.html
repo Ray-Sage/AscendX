@@ -4,7 +4,8 @@
 
 <title>My Database</title>
 
-<script type="module">
+<script type="module"> 
+import { getDocs, collection } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
 import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
 
@@ -47,6 +48,26 @@ window.addEventListener("DOMContentLoaded", () => {
   document.querySelector('#click').addEventListener('click', submit);
 });
 
+
+  async function readData() {
+  const querySnapshot = await getDocs(collection(db, "Gender"));
+
+  let output = "";
+
+  querySnapshot.forEach((doc) => {
+    const data = doc.data();
+
+    output += `
+      <p>
+        ID: ${doc.id} <br>
+        Age: ${data.age}
+      </p>
+      <hr>
+    `;
+  });
+
+  document.querySelector("#dt").innerHTML = output;
+}
 </script>
 
 </head>
@@ -59,6 +80,7 @@ window.addEventListener("DOMContentLoaded", () => {
 <button id="click">Submit</button>
 
 <h1 id="me"></h1>
+  <h2 id="dt"></h2>
 
 </body>
 </html>
