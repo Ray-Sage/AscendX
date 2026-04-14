@@ -1,12 +1,29 @@
 <!DOCTYPE html>
 <html>
 <head>
-<style>
-  #dd{
-    background: black;
-    color: white;
+
+  <style>
+  .card {
+    border: 1px solid #ccc;
+    padding: 12px;
+    margin: 10px 0;
+    border-radius: 10px;
+    background: #f9f9f9;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    font-family: Arial;
+  }
+
+  .id {
+    font-size: 12px;
+    color: gray;
+  }
+
+  .age {
+    font-size: 18px;
+    font-weight: bold;
   }
 </style>
+
 <title>My Database</title>
 
 <script type="module"> 
@@ -61,13 +78,15 @@ window.readData = readData;
 
   querySnapshot.forEach((doc) => {
     const data = doc.data();
-
+  const div = document.createElement("div");
+    div.className = "card";
     output += `
-     <div id="dd"> <p>
-        ID: ${doc.id} <br>
-        Age: ${data.age}
-      </p>
-      </div>
+     div.innerHTML = `
+      <div class="id">ID: ${doc.id}</div>
+      <div class="age">Age: ${data.age}</div>
+    `;
+
+    container.appendChild(div);
     `;
   });
 
