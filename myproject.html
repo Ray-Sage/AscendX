@@ -1,110 +1,957 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Isabella Feed</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <style>
-  .card {
-    border: 1px solid #ccc;
-    padding: 12px;
-    margin: 10px 0;
-    border-radius: 10px;
-    background: #f9f9f9;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-    font-family: Arial;
-  }
+    :root {
+      --bg: #0b0f17;
+      --panel: rgba(18, 24, 38, 0.9);
+      --panel-2: rgba(24, 31, 48, 0.95);
+      --border: rgba(255,255,255,0.08);
+      --text: #eef2ff;
+      --muted: #94a3b8;
+      --accent: #7c3aed;
+      --accent-2: #22c55e;
+      --danger: #ef4444;
+      --shadow: 0 20px 50px rgba(0,0,0,.35);
+      --radius: 24px;
+      --radius-sm: 16px;
+    }
 
-  .id {
-    font-size: 12px;
-    color: gray;
-  }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+      background:
+        radial-gradient(circle at top left, rgba(124,58,237,.18), transparent 28%),
+        radial-gradient(circle at top right, rgba(34,197,94,.12), transparent 26%),
+        var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+    }
 
-  .age {
-    font-size: 18px;
-    font-weight: bold;
-  }
-</style>
+    a { color: inherit; }
+    .app {
+      width: min(1180px, calc(100% - 24px));
+      margin: 0 auto;
+      padding: 18px 0 48px;
+    }
 
-<title>My Database</title>
+    .topbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      padding: 14px 18px;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      background: linear-gradient(180deg, rgba(255,255,255,0.06), rgba(255,255,255,0.03));
+      box-shadow: var(--shadow);
+      position: sticky;
+      top: 12px;
+      backdrop-filter: blur(16px);
+      z-index: 20;
+    }
 
-<script type="module"> 
-import { getDocs} from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
-import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-weight: 800;
+      letter-spacing: .2px;
+    }
 
-const firebaseConfig = {
-  apiKey: "YOUR_KEY",
+    .logo {
+      width: 42px;
+      height: 42px;
+      border-radius: 14px;
+      display: grid;
+      place-items: center;
+      background: linear-gradient(135deg, var(--accent), #ec4899);
+      box-shadow: 0 12px 30px rgba(124,58,237,.35);
+      font-size: 20px;
+    }
+
+    .brand small {
+      display: block;
+      font-weight: 500;
+      color: var(--muted);
+      margin-top: 2px;
+    }
+
+    .top-actions {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+    }
+
+    .pill {
+      border: 1px solid var(--border);
+      background: rgba(255,255,255,.04);
+      color: var(--text);
+      padding: 10px 14px;
+      border-radius: 999px;
+      font-size: 14px;
+      outline: none;
+    }
+
+    .btn {
+      border: 0;
+      cursor: pointer;
+      padding: 11px 16px;
+      border-radius: 999px;
+      font-weight: 700;
+      color: white;
+      background: linear-gradient(135deg, var(--accent), #2563eb);
+      box-shadow: 0 14px 24px rgba(37,99,235,.24);
+      transition: transform .18s ease, opacity .18s ease;
+    }
+    .btn:hover { transform: translateY(-1px); }
+    .btn:disabled { opacity: .55; cursor: not-allowed; transform: none; }
+
+    .layout {
+      display: grid;
+      grid-template-columns: 340px 1fr;
+      gap: 18px;
+      margin-top: 18px;
+      align-items: start;
+    }
+
+    .card {
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      background: var(--panel);
+      box-shadow: var(--shadow);
+      overflow: hidden;
+    }
+
+    .card-header {
+      padding: 18px 18px 0;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+    }
+
+    .card-body { padding: 18px; }
+
+    .section-title {
+      font-size: 16px;
+      margin: 0 0 4px;
+      font-weight: 800;
+    }
+
+    .section-subtitle {
+      margin: 0;
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.5;
+    }
+
+    .field {
+      display: grid;
+      gap: 8px;
+      margin-top: 14px;
+    }
+
+    .field label {
+      font-size: 13px;
+      color: #cbd5e1;
+      font-weight: 600;
+    }
+
+    .input, .textarea {
+      width: 100%;
+      border: 1px solid var(--border);
+      background: rgba(255,255,255,.04);
+      color: var(--text);
+      border-radius: 16px;
+      padding: 13px 14px;
+      outline: none;
+      font: inherit;
+    }
+
+    .textarea {
+      min-height: 120px;
+      resize: vertical;
+    }
+
+    .input::placeholder, .textarea::placeholder { color: #64748b; }
+
+    .helper {
+      font-size: 12px;
+      color: var(--muted);
+      line-height: 1.5;
+    }
+
+    .row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+      margin-top: 16px;
+    }
+
+    .stat {
+      border: 1px solid var(--border);
+      background: var(--panel-2);
+      border-radius: 18px;
+      padding: 14px;
+    }
+
+    .stat strong {
+      display: block;
+      font-size: 20px;
+      margin-bottom: 4px;
+    }
+
+    .stat span { color: var(--muted); font-size: 12px; }
+
+    .feed-shell {
+      display: grid;
+      gap: 16px;
+    }
+
+    .feed-toolbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 16px 18px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .feed-title {
+      margin: 0;
+      font-size: 18px;
+      font-weight: 800;
+    }
+
+    .feed-meta {
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .filters {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+
+    .chip {
+      border: 1px solid var(--border);
+      background: rgba(255,255,255,.04);
+      color: var(--text);
+      padding: 9px 12px;
+      border-radius: 999px;
+      cursor: pointer;
+      font-size: 13px;
+    }
+
+    .chip.active { background: rgba(124,58,237,.25); border-color: rgba(124,58,237,.55); }
+
+    .posts {
+      display: grid;
+      gap: 16px;
+      padding: 0 0 16px;
+    }
+
+    .post {
+      border: 1px solid var(--border);
+      background: var(--panel);
+      border-radius: 26px;
+      overflow: hidden;
+      box-shadow: var(--shadow);
+    }
+
+    .post-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 16px 18px;
+    }
+
+    .userbox {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      min-width: 0;
+    }
+
+    .avatar {
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #f97316, #ec4899, #7c3aed);
+      display: grid;
+      place-items: center;
+      font-weight: 800;
+      flex: 0 0 auto;
+    }
+
+    .userbox strong {
+      display: block;
+      font-size: 14px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .userbox span, .time {
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    .post-img {
+      width: 100%;
+      aspect-ratio: 1 / 1;
+      object-fit: cover;
+      display: block;
+      background: rgba(255,255,255,.03);
+    }
+
+    .post-body {
+      padding: 16px 18px 18px;
+    }
+
+    .caption {
+      margin: 0;
+      line-height: 1.65;
+      color: #e2e8f0;
+      white-space: pre-wrap;
+      word-break: break-word;
+    }
+
+    .post-actions {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin-top: 14px;
+      flex-wrap: wrap;
+    }
+
+    .action-left, .action-right {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .icon-btn {
+      border: 1px solid var(--border);
+      background: rgba(255,255,255,.04);
+      color: var(--text);
+      border-radius: 999px;
+      padding: 10px 14px;
+      cursor: pointer;
+      font-weight: 600;
+      font-size: 13px;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .icon-btn.liked { background: rgba(239,68,68,.16); border-color: rgba(239,68,68,.45); }
+
+    .mini {
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .empty, .loading, .error {
+      padding: 26px 18px;
+      text-align: center;
+      color: var(--muted);
+      border: 1px dashed var(--border);
+      border-radius: 24px;
+      background: rgba(255,255,255,.03);
+    }
+
+    .error { color: #fca5a5; border-color: rgba(239,68,68,.35); }
+
+    .toast {
+      position: fixed;
+      left: 50%;
+      bottom: 22px;
+      transform: translateX(-50%);
+      background: rgba(15, 23, 42, .96);
+      border: 1px solid var(--border);
+      color: var(--text);
+      padding: 12px 16px;
+      border-radius: 999px;
+      box-shadow: var(--shadow);
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity .2s ease, transform .2s ease;
+      z-index: 50;
+      max-width: min(92vw, 560px);
+      text-align: center;
+    }
+
+    .toast.show {
+      opacity: 1;
+      transform: translateX(-50%) translateY(-4px);
+    }
+
+    .footer-note {
+      color: var(--muted);
+      font-size: 12px;
+      padding: 16px 4px 0;
+      text-align: center;
+    }
+
+    @media (max-width: 980px) {
+      .layout { grid-template-columns: 1fr; }
+      .topbar { position: static; }
+    }
+
+    @media (max-width: 640px) {
+      .app { width: min(100% - 16px, 1180px); }
+      .topbar, .card-header, .card-body, .feed-toolbar, .post-head, .post-body { padding-left: 14px; padding-right: 14px; }
+      .row { grid-template-columns: 1fr; }
+      .stats { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <header class="topbar">
+      <div class="brand">
+        <div class="logo">I</div>
+        <div>
+          Isabella
+          <small>Instagram-style feed powered by Firebase</small>
+        </div>
+      </div>
+
+      <div class="top-actions">
+        <input id="displayName" class="pill" type="text" maxlength="30" placeholder="Your display name" />
+        <button id="saveNameBtn" class="btn">Save name</button>
+      </div>
+    </header>
+
+    <main class="layout">
+      <section class="card">
+        <div class="card-header">
+          <div>
+            <h2 class="section-title">Create post</h2>
+            <p class="section-subtitle">Upload an image, write a caption, and publish straight to Firestore.</p>
+          </div>
+        </div>
+
+        <div class="card-body">
+          <form id="postForm">
+            <div class="field">
+              <label for="caption">Caption</label>
+              <textarea id="caption" class="textarea" maxlength="2200" placeholder="Write something powerful..."></textarea>
+            </div>
+
+            <div class="field">
+              <label for="imageFile">Image</label>
+              <input id="imageFile" class="input" type="file" accept="image/*" />
+              <div class="helper">Images go to Firebase Storage, then the download URL is saved into Firestore.</div>
+            </div>
+
+            <div class="row">
+              <div class="field">
+                <label for="altText">Alt text</label>
+                <input id="altText" class="input" type="text" maxlength="120" placeholder="Describe the image" />
+              </div>
+              <div class="field">
+                <label for="imageUrl">Or image URL</label>
+                <input id="imageUrl" class="input" type="url" placeholder="https://..." />
+              </div>
+            </div>
+
+            <div class="field">
+              <button id="publishBtn" class="btn" type="submit">Publish post</button>
+            </div>
+
+            <div class="helper">You can use either an uploaded file or a direct image URL. File upload is the better production path.</div>
+          </form>
+
+          <div class="stats">
+            <div class="stat">
+              <strong id="statPosts">0</strong>
+              <span>Posts</span>
+            </div>
+            <div class="stat">
+              <strong id="statLikes">0</strong>
+              <span>Total likes</span>
+            </div>
+            <div class="stat">
+              <strong id="statOnline">—</strong>
+              <span>Auth state</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="card feed-shell">
+        <div class="feed-toolbar">
+          <div>
+            <h1 class="feed-title">Feed</h1>
+            <div class="feed-meta" id="feedMeta">Loading posts…</div>
+          </div>
+
+          <div class="filters">
+            <button class="chip active" data-filter="all">All</button>
+            <button class="chip" data-filter="mine">My posts</button>
+            <button class="chip" data-filter="liked">Liked by me</button>
+          </div>
+        </div>
+
+        <div class="card-body" style="padding-top: 0;">
+          <div id="feedStatus" class="loading">Connecting to Firebase…</div>
+          <div id="posts" class="posts" style="display:none;"></div>
+        </div>
+      </section>
+    </main>
+
+    <div class="footer-note">Tip: after this file works, split the CSS and JS into separate files and keep the Firebase config in one module.</div>
+  </div>
+
+  <div id="toast" class="toast"></div>
+
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-app.js";
+    import { getAuth, onAuthStateChanged, signInAnonymously } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-auth.js";
+    import {
+      getFirestore,
+      collection,
+      addDoc,
+      query,
+      orderBy,
+      onSnapshot,
+      serverTimestamp,
+      doc,
+      runTransaction,
+      getDoc,
+      updateDoc,
+      increment
+    } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore.js";
+    import {
+      getStorage,
+      ref as storageRef,
+      uploadBytes,
+      getDownloadURL
+    } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-storage.js";
+
+    // 1) Replace these values with your Firebase project config.
+   const firebaseConfig = {
+  apiKey: "AIzaSyDNquP5homZ8FVC1FeREZJhrrCS_ifx7Ag",
   authDomain: "skywork-library.firebaseapp.com",
-  projectId: "skywork-library"
+  projectId: "skywork-library",
+  storageBucket: "skywork-library.firebasestorage.app",
+  messagingSenderId: "867559082713",
+  appId: "1:867559082713:web:7e628d977cc064f3130cc8",
+  measurementId: "G-6F2Q451YP0"
 };
 
-const app = initializeApp(firebaseConfig);
-const db = getFirestore(app);
 
-// ✅ MAIN FUNCTION
-async function submit() {
-  const age = document.querySelector('#age').value;
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db = getFirestore(app);
+    const storage = getStorage(app);
 
-  if (age.length < 2) {
-    alert('Age must be valid');
-    return;
-  }
+    const $ = (id) => document.getElementById(id);
+    const postForm = $('postForm');
+    const captionEl = $('caption');
+    const imageFileEl = $('imageFile');
+    const altTextEl = $('altText');
+    const imageUrlEl = $('imageUrl');
+    const publishBtn = $('publishBtn');
+    const displayNameEl = $('displayName');
+    const saveNameBtn = $('saveNameBtn');
+    const postsEl = $('posts');
+    const feedStatusEl = $('feedStatus');
+    const feedMetaEl = $('feedMeta');
+    const toastEl = $('toast');
+    const statPostsEl = $('statPosts');
+    const statLikesEl = $('statLikes');
+    const statOnlineEl = $('statOnline');
 
-  try {
-    const docm = await addDoc(collection(db, "Gender"), {
-      age: age
+    const state = {
+      user: null,
+      filter: 'all',
+      posts: [],
+      likesTotal: 0,
+      name: localStorage.getItem('isabella_display_name') || '',
+    };
+
+    displayNameEl.value = state.name;
+
+    function showToast(message) {
+      toastEl.textContent = message;
+      toastEl.classList.add('show');
+      clearTimeout(showToast.timer);
+      showToast.timer = setTimeout(() => toastEl.classList.remove('show'), 2600);
+    }
+
+    function escapeHtml(str = '') {
+      return String(str)
+        .replaceAll('&', '&amp;')
+        .replaceAll('<', '&lt;')
+        .replaceAll('>', '&gt;')
+        .replaceAll('"', '&quot;')
+        .replaceAll("'", '&#39;');
+    }
+
+    function formatTime(ts) {
+      if (!ts) return 'Just now';
+      const date = ts.toDate ? ts.toDate() : new Date(ts);
+      return new Intl.DateTimeFormat(undefined, {
+        dateStyle: 'medium',
+        timeStyle: 'short'
+      }).format(date);
+    }
+
+    function initials(name = 'U') {
+      const cleaned = String(name).trim();
+      if (!cleaned) return 'U';
+      const parts = cleaned.split(/\s+/).slice(0, 2);
+      return parts.map(p => p[0] || '').join('').toUpperCase();
+    }
+
+    function postMatchesFilter(post) {
+      if (state.filter === 'mine') return post.userId === state.user?.uid;
+      if (state.filter === 'liked') return Array.isArray(post.likes) && post.likes.includes(state.user?.uid);
+      return true;
+    }
+
+    function render() {
+      const posts = state.posts.filter(postMatchesFilter);
+      statPostsEl.textContent = String(state.posts.length);
+      statLikesEl.textContent = String(state.likesTotal);
+      statOnlineEl.textContent = state.user ? 'Connected' : 'No auth yet';
+      feedMetaEl.textContent = `${posts.length} post${posts.length === 1 ? '' : 's'} shown`;
+
+      if (!posts.length) {
+        postsEl.style.display = 'none';
+        feedStatusEl.style.display = 'block';
+        feedStatusEl.className = 'empty';
+        feedStatusEl.textContent = state.posts.length ? 'No posts match this filter.' : 'No posts yet. Publish the first one.';
+        return;
+      }
+
+      postsEl.style.display = 'grid';
+      feedStatusEl.style.display = 'none';
+      postsEl.innerHTML = posts.map(post => {
+        const liked = Array.isArray(post.likes) && state.user?.uid && post.likes.includes(state.user.uid);
+        const likes = Array.isArray(post.likes) ? post.likes.length : 0;
+        const name = post.userName || 'Anonymous';
+        const img = post.imageUrl || 'https://images.unsplash.com/photo-1516321318423-f06f85e504b3?auto=format&fit=crop&w=1200&q=80';
+        const caption = escapeHtml(post.caption || '');
+        const alt = escapeHtml(post.altText || 'Post image');
+        return `
+          <article class="post" data-id="${post.id}">
+            <div class="post-head">
+              <div class="userbox">
+                <div class="avatar">${escapeHtml(initials(name))}</div>
+                <div style="min-width:0;">
+                  <strong>${escapeHtml(name)}</strong>
+                  <span>${formatTime(post.createdAt)} • ${post.visibility || 'public'}</span>
+                </div>
+              </div>
+              <span class="time">${likes} like${likes === 1 ? '' : 's'}</span>
+            </div>
+            <img class="post-img" src="${img}" alt="${alt}" loading="lazy" />
+            <div class="post-body">
+              <p class="caption">${caption || '<span class="mini">No caption.</span>'}</p>
+              <div class="post-actions">
+                <div class="action-left">
+                  <button class="icon-btn ${liked ? 'liked' : ''}" data-action="like" data-id="${post.id}">${liked ? '♥' : '♡'} Like</button>
+                  <button class="icon-btn" data-action="copy" data-url="${img}">↗ Copy image link</button>
+                </div>
+                <div class="action-right">
+                  <span class="mini">ID: ${escapeHtml(post.id)}</span>
+                </div>
+              </div>
+            </div>
+          </article>
+        `;
+      }).join('');
+    }
+
+    async function ensureUser() {
+      try {
+        await signInAnonymously(auth);
+      } catch (err) {
+        console.error(err);
+        showToast('Anonymous auth failed. Check Firebase config and Auth settings.');
+      }
+    }
+
+    async function uploadImageIfNeeded() {
+      const file = imageFileEl.files?.[0];
+      const typedUrl = imageUrlEl.value.trim();
+
+      if (file) {
+        const path = `posts/${Date.now()}-${file.name}`;
+        const ref = storageRef(storage, path);
+        await uploadBytes(ref, file);
+        return await getDownloadURL(ref);
+      }
+
+      if (typedUrl) return typedUrl;
+      return '';
+    }
+
+    async function createPost({ caption, imageUrl, altText, user }) {
+      const userName = (displayNameEl.value || localStorage.getItem('isabella_display_name') || '').trim() || 'Anonymous';
+      await addDoc(collection(db, 'posts'), {
+        caption,
+        imageUrl,
+        altText,
+        userId: user.uid,
+        userName,
+        likes: [],
+        commentsCount: 0,
+        visibility: 'public',
+        createdAt: serverTimestamp()
+      });
+    }
+
+    async function toggleLike(postId) {
+      if (!state.user) {
+        showToast('Wait for auth to connect.');
+        return;
+      }
+
+      const postRef = doc(db, 'posts', postId);
+      await runTransaction(db, async (transaction) => {
+        const snap = await transaction.get(postRef);
+        if (!snap.exists()) return;
+
+        const data = snap.data();
+        const likes = Array.isArray(data.likes) ? data.likes : [];
+        const uid = state.user.uid;
+        const alreadyLiked = likes.includes(uid);
+        const nextLikes = alreadyLiked ? likes.filter(id => id !== uid) : [...likes, uid];
+        transaction.update(postRef, { likes: nextLikes });
+      });
+    }
+
+    async function saveDisplayName() {
+      const name = displayNameEl.value.trim();
+      localStorage.setItem('isabella_display_name', name);
+      showToast(name ? `Saved as ${name}` : 'Display name cleared');
+    }
+
+    document.querySelectorAll('.chip').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('.chip').forEach(x => x.classList.remove('active'));
+        btn.classList.add('active');
+        state.filter = btn.dataset.filter;
+        render();
+      });
     });
 
-    console.log("Document ID:", docm.id);
-    alert("Data added successfully");
+    saveNameBtn.addEventListener('click', saveDisplayName);
+    displayNameEl.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') {
+        e.preventDefault();
+        saveDisplayName();
+      }
+    });
 
-    document.querySelector('#me').innerHTML = `age: ${age} <br> ID: ${docm.id}`;
+    postForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const caption = captionEl.value.trim();
+      const altText = altTextEl.value.trim();
 
-  } catch (error) {
-    console.error(error);
-    alert(error.message);
-  }
-}
+      if (!caption && !imageFileEl.files?.[0] && !imageUrlEl.value.trim()) {
+        showToast('Add a caption or an image first.');
+        return;
+      }
 
-// ✅ CONNECT BUTTON AFTER PAGE LOAD
-window.addEventListener("DOMContentLoaded", () => {
-  document.querySelector('#click').addEventListener('click', submit);
-});
+      publishBtn.disabled = true;
+      publishBtn.textContent = 'Publishing…';
 
-window.readData = readData;
-  async function readData() {
-  const querySnapshot = await getDocs(collection(db, "Gender"));
+      try {
+        const imageUrl = await uploadImageIfNeeded();
+        if (!imageUrl) {
+          showToast('Add an image file or image URL.');
+          return;
+        }
 
-  let output = "";
+        if (!state.user) {
+          showToast('Waiting for Firebase auth…');
+          return;
+        }
 
-  querySnapshot.forEach((doc) => {
-    const data = doc.data();
-  const div = document.createElement("div");
-    div.className = "card";
-    output += `
-     div.innerHTML = `
-      <div>ID: ${doc.id}</div>
-      <div>Age: ${data.age}</div>
-     
-    `;
-     container.appendChild(div);
-  });
+        await createPost({ caption, imageUrl, altText, user: state.user });
+        captionEl.value = '';
+        altTextEl.value = '';
+        imageUrlEl.value = '';
+        imageFileEl.value = '';
+        showToast('Post published');
+      } catch (err) {
+        console.error(err);
+        showToast('Could not publish post. Check Storage rules and Firestore rules.');
+      } finally {
+        publishBtn.disabled = false;
+        publishBtn.textContent = 'Publish post';
+      }
+    });
 
-  document.querySelector("#dt").innerHTML = output;
-}
-</script>
+    postsEl.addEventListener('click', async (e) => {
+      const btn = e.target.closest('button');
+      if (!btn) return;
 
-</head>
+      const action = btn.dataset.action;
+      const postId = btn.dataset.id;
 
-<body>
+      if (action === 'like' && postId) {
+        try {
+          await toggleLike(postId);
+        } catch (err) {
+          console.error(err);
+          showToast('Like failed. Check Firestore rules.');
+        }
+      }
 
-<h2>Firebase Test</h2>
+      if (action === 'copy' && btn.dataset.url) {
+        try {
+          await navigator.clipboard.writeText(btn.dataset.url);
+          showToast('Image link copied');
+        } catch {
+          showToast('Clipboard blocked by browser');
+        }
+      }
+    });
 
-<input type="number" id="age" placeholder="Enter age">
-<button id="click">Submit</button>
-  <button onclick="readData();">Show data</button>
+    onAuthStateChanged(auth, (user) => {
+      state.user = user;
+      statOnlineEl.textContent = user ? 'Connected' : 'Signed out';
+    });
 
-<h1 id="me"></h1>
-  <h2 id="dt"></h2>
+    async function start() {
+      await ensureUser();
 
+      const q = query(collection(db, 'posts'), orderBy('createdAt', 'desc'));
+      onSnapshot(q, (snapshot) => {
+        state.posts = snapshot.docs.map((docSnap) => ({ id: docSnap.id, ...docSnap.data() }));
+        state.likesTotal = state.posts.reduce((sum, p) => sum + (Array.isArray(p.likes) ? p.likes.length : 0), 0);
+        render();
+      }, (error) => {
+        console.error(error);
+        feedStatusEl.style.display = 'block';
+        feedStatusEl.className = 'error';
+        feedStatusEl.textContent = 'Failed to load posts. Check Firestore rules, indexes, and config.';
+        postsEl.style.display = 'none';
+      });
+    }
+
+    start();
+  
+
+    // ===== COMMENTS SYSTEM =====
+    const commentListeners = new Map();
+
+    function subscribeComments(postId, container) {
+      if (commentListeners.has(postId)) return;
+
+      const q = query(
+        collection(db, 'posts', postId, 'comments'),
+        orderBy('createdAt', 'desc')
+      );
+
+      const unsub = onSnapshot(q, (snapshot) => {
+        const comments = snapshot.docs.map(d => d.data());
+        container.innerHTML = comments.map(c => `
+          <div style="margin-top:8px;padding:8px 10px;border:1px solid var(--border);border-radius:12px;background:rgba(255,255,255,.03)">
+            <strong>${escapeHtml(c.userName || 'User')}</strong>
+            <div class="mini">${formatTime(c.createdAt)}</div>
+            <div>${escapeHtml(c.text)}</div>
+          </div>
+        `).join('') || '<div class="mini">No comments yet</div>';
+      });
+
+      commentListeners.set(postId, unsub);
+    }
+
+    async function addComment(postId, text) {
+      if (!state.user) return showToast('Auth required');
+      if (!text.trim()) return;
+
+      const userName = displayNameEl.value || 'Anonymous';
+
+      await addDoc(collection(db, 'posts', postId, 'comments'), {
+        text,
+        userId: state.user.uid,
+        userName,
+        createdAt: serverTimestamp()
+      });
+
+      await updateDoc(doc(db, 'posts', postId), {
+        commentsCount: increment(1)
+      });
+    }
+
+    // Extend render to include comments UI
+    const oldRender = render;
+    render = function () {
+      oldRender();
+
+      document.querySelectorAll('.post').forEach(postEl => {
+        const postId = postEl.dataset.id;
+
+        if (postEl.querySelector('.comments-box')) return;
+
+        const box = document.createElement('div');
+        box.className = 'comments-box';
+        box.style.marginTop = '12px';
+
+        box.innerHTML = `
+          <div class="mini" style="margin-bottom:6px">Comments</div>
+          <div id="comments-${postId}"></div>
+          <div style="display:flex;gap:8px;margin-top:8px">
+            <input type="text" placeholder="Write a comment..." style="flex:1" class="input" id="input-${postId}" />
+            <button class="btn" data-comment="${postId}">Send</button>
+          </div>
+        `;
+
+        postEl.querySelector('.post-body').appendChild(box);
+
+        const container = box.querySelector(`#comments-${postId}`);
+        subscribeComments(postId, container);
+      });
+    }
+
+    // Handle comment submit
+    postsEl.addEventListener('click', async (e) => {
+      const btn = e.target.closest('[data-comment]');
+      if (!btn) return;
+
+      const postId = btn.dataset.comment;
+      const input = document.getElementById(`input-${postId}`);
+      const text = input.value;
+
+      try {
+        await addComment(postId, text);
+        input.value = '';
+      } catch (err) {
+        console.error(err);
+        showToast('Failed to comment');
+      }
+    });
+
+  </script>
 </body>
 </html>
