@@ -95,49 +95,8 @@
 
   function runCode() {
   const code = editor.getValue();
-   let navCode = `
-     <nav id="previewNav">
-     <div class="previewNav"> <button onclick="window.history.back()"><h3>❮ Back</h3></button><p>Preview Mode</p><p style="opacity:0"> hello  </p></div>
-</nav>
-<style>
-    .previewNav{
-        display: flex;
-        
-        flex-direction: row;
-        justify-content: space-between;
-        align-items: center;
-        
-    }
-    #previewNav{
-        position: relative;
-        top:0;
-        color: white;
-        background: black;
-        font-weight: bold;
-        margin-top: -10;
-        margin-left: -10;
-        margin-right: -10;
-        padding-bottom: 17px;
-        height: 30px;
-    }
-    .previewNav button{
-        color: white;
-        background: none;
-        font-weight: bold;
-        border: none;
-        margin-left: 6px;
-    }
-</style>
-
-     ${code}
-    `;
-    
-    
-    
-    const win = window.open();
-    win.document.open();
-    win.document.write(navCode);
-    win.document.close();
+  const hidden = btoa(code);
+  window.location.href="preview.html?q=" + hidden;
   }
 
   function downloadCode() {
