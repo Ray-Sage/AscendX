@@ -54,12 +54,11 @@
 <script>
     
   const param = new URLSearchParams(window.location.search);
-const urlGet = param.get("q");
+const urlGet = param.get("codes");
 const backToNormal = atob(urlGet);
-const params = new URLSearchParams(backToNormal);
-const urlQuery = params.get("codes");
 
-const code = urlQuery;
+
+const code = backToNormal;
 
     
     
@@ -72,7 +71,7 @@ function runCode(html) {
 }
 
 
-runCode (code);
+runCode ();
 </script>
 </body>
 </html>
