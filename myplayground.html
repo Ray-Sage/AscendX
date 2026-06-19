@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Pro HTML Editor</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <!-- Monaco Editor -->
+  <script src="https://unpkg.com/monaco-editor@0.45.0/min/vs/loader.js"></script>
+
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: "Segoe UI", sans-serif;
+    }
+
+    body {
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      background: #1e1e1e;
+      color: white;
+    }
+
+    header {
+      padding: 10px 15px;
+      background: #111;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    header h1 {
+      font-size: 16px;
+      color: #0af;
+    }
+
+    .buttons button {
+      margin-left: 8px;
+      padding: 6px 10px;
+      border: none;
+      background: #0af;
+      color: white;
+      cursor: pointer;
+      border-radius: 4px;
+    }
+
+    #editor {
+      flex: 1;
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <h1>AscendX!</h1>
+  <div class="buttons">
+    <button onclick="runCode()">Preview ▶</button>
+    <button onclick="downloadCode()">Download</button>
+    <button onclick="resetCode()">Reset</button>
+  </div>
+</header>
+
+<div id="editor"></div>
+
+<script>
+    alert("Kindly wait for the editor to load successfully. You will see some HTML sample code after loading is done.")
+  let editor;
+
+  require.config({ paths: { vs: "https://unpkg.com/monaco-editor@0.45.0/min/vs" }});
+
+  require(["vs/editor/editor.main"], function () {
+    editor = monaco.editor.create(document.getElementById("editor"), {
+      value: `<!DOCTYPE html>
+<html>
+<head>
+  <title>My Page</title>
+  <meta name="viewport" content="width=device-width, initial-scale= 1.0">
+</head>
+<body>
+  <h1>Hello, Ascend!</h1>
+  <p>Hey, I'm learning to code....</p>
+</body>
+</html>`,
+      language: "html",
+      theme: "vs-dark",
+      automaticLayout: true
+    });
+  });
+
+  function runCode() {
+    const code = editor.getValue();
+    const win = window.open();
+    win.document.open();
+    win.document.write(code);
+    win.document.close();
+  }
+
+  function downloadCode() {
+    const blob = new Blob([editor.getValue()], { type: "text/html" });
+    const a = document.createElement("a");
+    a.href = URL.createObjectURL(blob);
+    if (confirm("Download code? note that it will be saved as MyAscendX.html.")){
+    a.download = "MyAscendX.html";
+    a.click();
+    }
+    
+  }
+
+  function resetCode() {
+    if (confirm("Reset code?")) {
+      editor.setValue("<h1>Start coding here...</h1>");
+    }
+  }
+</script>
+
+</body>
+</html>
