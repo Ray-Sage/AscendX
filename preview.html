@@ -2,6 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width="device-width, initial-scale="1.0">
     <title>AscendX - Preview</title>
 </head>
 <style>
@@ -56,7 +57,7 @@
 const urlGet = param.get("q");
 const backToNormal = atob(urlGet);
 const params = new URLSearchParams(backToNormal);
-const urlQuery = params.get("q");
+const urlQuery = params.get("codes");
 
 const code = urlQuery;
 
