@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>AscendX - Preview</title>
+</head>
+<style>
+  body { margin: 0; }
+
+  #previewNav {
+    background: black;
+    color: white;
+    font-weight: bold;
+    padding: 10px;
+  }
+
+  .previewNav {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+  }
+
+  #previewNav p,
+  #previewNav button {
+    color: white;
+    background: none;
+    margin: 0;
+    border: none;
+  }
+  #display{
+      width: 100%;
+      height: 100vh;
+      border: none;
+      
+  }
+</style>
+
+<body>
+  <nav id="previewNav">
+  <div class="previewNav">
+    <button onclick="window.history.back()">❮ Back</button>
+    <p>Preview Mode</p>
+    <p style="visibility:hidden;">hello</p>
+  </div>
+</nav>
+
+<iframe id="display">
+    
+    </iframe>
+
+<script>
+    
+  const param = new URLSearchParams(window.location.search);
+const urlGet = param.get("q");
+const backToNormal = atob(urlGet);
+const params = new URLSearchParams(backToNormal);
+const urlQuery = params.get("q");
+
+const code = urlQuery;
+
+    
+    
+    
+let iframe = document.getElementById("display");
+
+function runCode(html) {
+  iframe.srcdoc= ` ${code}
+      `;
+}
+
+
+runCode (code);
+</script>
+</body>
+</html>
