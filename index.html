@@ -91,11 +91,15 @@
       theme: "vs-dark",
       automaticLayout: true
     });
+    const saved = localStorage.getItem("myCode");
+  if (saved) {
+    editor.setValue(saved);
+  }
   });
 
   function runCode() {
   const code = editor.getValue();
-  
+  setDB(code)
   window.location.href = `preview.html?codes=${encodeURIComponent(code)}`;
   }
 
@@ -115,6 +119,11 @@
       editor.setValue("<h1>Start coding here...</h1>");
     }
   }
+
+  function setDB(code){
+      localStorage.setItem("myCode", code)
+  }
+  
 </script>
 
 </body>
