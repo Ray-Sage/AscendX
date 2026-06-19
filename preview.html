@@ -66,12 +66,12 @@ const code = urlGet;
 let iframe = document.getElementById("display");
 
 function runCode(html) {
-  iframe.srcdoc= ` ${code}
+  iframe.srcdoc= ` ${html}
       `;
 }
 
 
-runCode ();
+runCode (code);
 </script>
 </body>
 </html>
