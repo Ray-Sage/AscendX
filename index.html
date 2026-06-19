@@ -4,6 +4,7 @@
   <meta charset="UTF-8">
   <title>AscendX Editor</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
 
   <!-- Monaco Editor -->
   <script src="https://unpkg.com/monaco-editor@0.45.0/min/vs/loader.js"></script>
@@ -50,6 +51,8 @@
     #editor {
       flex: 1;
     }
+    
+    
   </style>
 </head>
 <body>
@@ -57,7 +60,7 @@
 <header>
   <h1>AscendX!</h1>
   <div class="buttons">
-    <button onclick="runCode()">Preview ▶</button>
+    <button onclick="runCode()">Preview ▶</button> 
     <button onclick="downloadCode()">Download</button>
     <button onclick="resetCode()">Reset</button>
   </div>
@@ -66,7 +69,7 @@
 <div id="editor"></div>
 
 <script>
-    alert("Kindly wait for the editor to load successfully. You will see some HTML sample code after loading is done.")
+    
   let editor;
 
   require.config({ paths: { vs: "https://unpkg.com/monaco-editor@0.45.0/min/vs" }});
@@ -91,10 +94,49 @@
   });
 
   function runCode() {
-    const code = editor.getValue();
+  const code = editor.getValue();
+   let navCode = `
+     <nav id="previewNav">
+     <div class="previewNav"> <button onclick="window.history.back()"><h3>❮ Back</h3></button><p>Preview Mode</p><p style="opacity:0"> hello  </p></div>
+</nav>
+<style>
+    .previewNav{
+        display: flex;
+        
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+        
+    }
+    #previewNav{
+        position: relative;
+        top:0;
+        color: white;
+        background: black;
+        font-weight: bold;
+        margin-top: -10;
+        margin-left: -10;
+        margin-right: -10;
+        padding-bottom: 17px;
+        height: 30px;
+    }
+    .previewNav button{
+        color: white;
+        background: none;
+        font-weight: bold;
+        border: none;
+        margin-left: 6px;
+    }
+</style>
+
+     ${code}
+    `;
+    
+    
+    
     const win = window.open();
     win.document.open();
-    win.document.write(code);
+    win.document.write(navCode);
     win.document.close();
   }
 
