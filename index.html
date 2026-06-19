@@ -95,8 +95,8 @@
 
   function runCode() {
   const code = editor.getValue();
-  const hidden = btoa(code);
-  window.location.href="preview.html?codes=" + hidden;
+  const safe = encodeURIComponent(code);
+  window.location.href="preview.html?codes=" + safe;
   }
 
   function downloadCode() {
